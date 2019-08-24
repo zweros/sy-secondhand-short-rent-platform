@@ -77,6 +77,13 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
+        <!--  Devtools 启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!-- 表示该坐标只作用本项目中，被继承时，不会向下传递 -->
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
