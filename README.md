@@ -21,15 +21,15 @@
 ### 项目名
 	 sy-short-rent-platform
 ### 项目结构
- sy-short-rent-platform<br/>
- 		commons<br/>
-		sy-spring-cloud-user<br/>
-		sy-spring-cloud-user-service<br/>
-		sy-spring-cloud-goods<br/>
-		sy-spring-cloud-goods-service<br/>
-		sy-spring-cloud-web-portal<br/>
-		sy-spring-clound-zuul<br/>
-		sy-spring-cloud-config<br/>
+sy-short-rent-platform<br/>
+---------->commons<br/>
+---------->sy-spring-cloud-user<br/>
+---------->sy-spring-cloud-user-service<br/>
+---------->sy-spring-cloud-goods<br/>
+---------->sy-spring-cloud-goods-service<br/>
+---------->sy-spring-cloud-web-portal<br/>
+---------->sy-spring-clound-zuul<br/>
+---------->sy-spring-cloud-config<br/>
 
 
 	
