@@ -1,7 +1,6 @@
 package com.szxy.provider.service;
 
 import com.szxy.pojo.Goods;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,16 +20,16 @@ public interface ProviderFeignGoodsService {
      * @param cateid
      * @return
      */
-    @RequestMapping(value = "/catelogGoods/{cateid}/{limit}", method = RequestMethod.GET)
-    public List<Goods> findByCatelogGoodsIdService(@RequestParam("cateid") Integer  cateid, @RequestParam("limit") Integer limit);
+    @RequestMapping(value = "/catelogGoods", method = RequestMethod.GET)
+    public List<Goods> findByCatelogGoodsIdService(@RequestParam(value="cateid",required = false) Integer  cateid, @RequestParam(value="limit",required = false) Integer limit);
 
     /**
      * 查询单个物品信息
      * @param id
      * @return
      */
-    @RequestMapping(value="/good/{id}",method = RequestMethod.GET)
-    public Goods findByGoodIdService(@PathVariable Integer id);
+    @RequestMapping(value="/good/",method = RequestMethod.GET)
+    public Goods findByGoodIdService(@RequestParam(value="id") Integer id);
 
 
 }

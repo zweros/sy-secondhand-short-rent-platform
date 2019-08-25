@@ -2,7 +2,7 @@ package com.szxy.utils;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.ldu.pojo.Orders;
+import com.szxy.pojo.Orders;
 
 import java.util.List;
 

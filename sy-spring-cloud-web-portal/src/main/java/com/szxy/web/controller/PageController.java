@@ -14,6 +14,9 @@ public class PageController {
         return page;
     }
 
-
+    @RequestMapping("/goods/goodsHeader")
+    public String loadGoodsHeader(){
+        return "/goods/goodsHeader";
+    }
 
 }

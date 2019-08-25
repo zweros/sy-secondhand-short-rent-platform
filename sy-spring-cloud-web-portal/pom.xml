@@ -45,6 +45,12 @@
         <dependency>
             <groupId>com.szxy</groupId>
             <artifactId>sy-spring-cloud-user-service</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.szxy</groupId>
+                    <artifactId>commons</artifactId>
+                </exclusion>
+            </exclusions>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- Spring Boot Web 启动器 -->
@@ -76,6 +82,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+        <!-- Spring Data Redis 的启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- Spring Boot Test 启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <!--  Devtools 启动器 -->
         <dependency>
