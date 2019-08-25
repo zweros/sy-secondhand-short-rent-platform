@@ -4,429 +4,364 @@
 <head>
     <meta charset="utf-8"/>
     <title>宿院短租平台</title>
-    <link rel="icon" href="/img/logo.jpg" type="image/x-icon"/>
-    <link rel="stylesheet" href="/css/index.css"/>
     <script type="text/javascript" src="/js/jquery.js"></script>
     <script type="text/javascript" src="/js/materialize.min.js"></script>
     <script type="text/javascript" src="/js/index.bundle.js"></script>
     <link rel="stylesheet" href="/css/materialize-icon.css"/>
     <link rel="stylesheet" href="/css/user.css"/>
+    <link rel="icon" href="/img/logo.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" href="/css/index.css"/>
     <script>
-        function showLogin() {
-            if ($("#signup-show").css("display") == 'block') {
-                $("#signup-show").css("display", "none");
-            }
-            if ($("#login-show").css("display") == 'none') {
-                $("#login-show").css("display", "block");
-            } else {
-                $("#login-show").css("display", "none");
-            }
-        }
-
-        function showSignup() {
-            if ($("#login-show").css("display") == 'block') {
-                $("#login-show").css("display", "none");
-            }
-            if ($("#signup-show").css("display") == 'none') {
-                $("#signup-show").css("display", "block");
-            } else {
-                $("#signup-show").css("display", "none");
-            }
-        }
-
-        function ChangeName() {
-            if ($("#changeName").css("display") == 'none') {
-                $("#changeName").css("display", "block");
-            } else {
-                $("#changeName").css("display", "none");
-            }
-        }
-
         $(document).ready(function () {
-            //异步验证
-            $("#phone").blur(function () {
-                var phone = $(this).val();
-                $.ajax({
-                    url: '/user/register',
-                    type: 'POST',
-                    data: {phone: phone},
-                    dataType: 'json',
-                    success: function (json) {
-                        if (json.flag) {
-                            $("#errorPhone").html("账号已被注册，请重新输入!");
-                            $("#register").attr("disabled", true);
-                        } else {
-                            $("#errorPhone").empty();
-                            $("#register").attr("disabled", false);
-                        }
-                    },
-                    error: function () {
-                        alert('请求超时或系统出错!');
-                    }
-                });
-
-            });
-
-            /*         $("#login_password").blur(function(){
-                          var phone=$("#login_phone").val();
-                          var password=$(this).val();
-                          $.ajax({
-                                url:/user/password',
-                                type:'POST',
-                                data:{phone:phone,password:password},
-                                dataType:'json',
-                                success:function(json){
-                                if(json){
-                                    if(json.flag){
-                                         $("#errorPassword").html("请核对账号密码，再重新输入!");
-                                         $("#loginIn").attr("disabled",true);
-                                    }else{
-                                         $("#errorPassword").empty();
-                                         $("#loginIn").attr("disabled",false);
-                                    }
-                                }else{
-                                    if(json.flag){
-                                       $("#errorPassword").html("请输入的密码有误!");
-                                       $("#loginIn").attr("disabled",true);
-                                  }if(json.flag==false){
-                                       $("#login_errorPhone").html("您输入的在账号有误!");
-                                       $("#loginIn").attr("disabled",true);
-                                  }
-                                }
-                                },
-                                error:function(json){
-                                   alert("系统出错啦")
-                                }
-                            });
-
-                        });*/
             //加载头部,不加参数发送 Get 请求
             $("#homeGoods-header").load("/goods/goodsHeader");
-
         });
+
+        function getGoodsDetail(thi) {
+            //alert($(thi).attr("goodsid"));
+            var goodsId = $(thi).attr("goodsid");
+            $("#homeGoods-content").load("/goods/goodsId/" + goodsId + ".html");
+        }
+
+        function getGoodsByCid(cid){
+            $(".main-content").load("/goods/catelog/" + cid + ".html");
+        }
 
 
     </script>
 </head>
-<body ng-view="ng-view">
+<body ng-view="ng-view" id="homeGoods-body">
 <!--加载头部-->
 <div id="homeGoods-header"></div>
 
-<!--
+<div id="homeGoods-content">
+    <!--
     描述：左侧导航条
--->
-<div ng-controller="sidebarController" class="sidebar stark-components ng-scope">
-    <li ng-class="{true: 'active'}[isAll]">
-        <a href="/goods/catelog" class="index">
-            <img src="/img/index.png">
-            <em>最新发布</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isDigital]">
-        <a href="/goods/catelog/1" class="digital">
-            <img src="/img/digital.png"/>
-            <em>闲置数码</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isRide]">
-        <a href="/goods/catelog/2" class="ride">
-            <img src="/img/ride.png"/>
-            <em>校园代步</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isCommodity]">
-        <a href="/goods/catelog/3" class="commodity">
-            <img src="/img/commodity.png"/>
-            <em>电器日用</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isBook]">
-        <a href="/goods/catelog/4" class="book">
-            <img src="/img/book.png"/>
-            <em>图书教材</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isMakeup]">
-        <a href="/goods/catelog/5" class="makeup">
-            <img src="/img/makeup.png"/>
-            <em>美妆衣物</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isSport]">
-        <a href="/goods/catelog/6" class="sport">
-            <img src="/img/sport.png"/>
-            <em>运动棋牌</em>
-        </a>
-    </li>
-    <li ng-class="{true: 'active'}[isSmallthing]">
-        <a href="/goods/catelog/7" class="smallthing">
-            <img src="/img/smallthing.png"/>
-            <em>票券小物</em>
-        </a>
-    </li>
-    <div class="info">
-        <a href="" target="_blank">关于我们</a><em>-</em>
-        <a href="">联系我们</a>
-        <p>©2019 宿院短租平台</p>
+    -->
+    <div ng-controller="sidebarController" class="sidebar stark-components ng-scope">
+        <li ng-class="{true: 'active'}[isAll]">
+            <!--<a href="/goods/catelog" class="index">-->
+            <!-- 0  表示查询全部   -->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(0)" class="index">
+                <img src="/img/index.png">
+                <em>最新发布</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isDigital]">
+            <!--<a href="/goods/catelog/1" class="digital">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(1)" class="digital">
+                <img src="/img/digital.png"/>
+                <em>闲置数码</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isRide]">
+            <!--<a href="/goods/catelog/2" class="ride">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(2)" class="ride">
+                <img src="/img/ride.png"/>
+                <em>校园代步</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isCommodity]">
+            <!--<a href="/goods/catelog/3" class="commodity">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(3)" class="commodity">
+                <img src="/img/commodity.png"/>
+                <em>电器日用</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isBook]">
+           <!-- <a href="/goods/catelog/4" class="book">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(4)" class="book">
+                <img src="/img/book.png"/>
+                <em>图书教材</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isMakeup]">
+            <!--<a href="/goods/catelog/5" class="makeup">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(5)" class="makeup">
+                <img src="/img/makeup.png"/>
+                <em>美妆衣物</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isSport]">
+            <!--<a href="/goods/catelog/6" class="sport">-->
+            <a href="javaScript:void(0)" onclick="getGoodsByCid(6)" class="sport">
+                <img src="/img/sport.png"/>
+                <em>运动棋牌</em>
+            </a>
+        </li>
+        <li ng-class="{true: 'active'}[isSmallthing]">
+                <!-- <a href="/goods/catelog/7" class="smallthing">-->
+                <a href="javaScript:void(0)" onclick="getGoodsByCid(7)" class="smallthing">
+                <img src="/img/smallthing.png"/>
+                <em>票券小物</em>
+            </a>
+        </li>
+        <div class="info">
+            <a href="" target="_blank">关于我们</a><em>-</em>
+            <a href="">联系我们</a>
+            <p>©2019 宿院短租平台</p>
+        </div>
     </div>
-</div>
-<!--
-
-    描述：右侧显示部分
--->
-<div class="main-content">
     <!--
 
-        描述：右侧banner（图片）部分
+        描述：右侧显示部分
     -->
-    <div class="slider-wapper">
-        <div class="slider"
-             style="height: 440px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-            <ul class="slides" style="height: 400px;">
-                <li class="active" style="opacity: 1;">
-                    <a href="/goods/homeGoods">
-                        <div class="bannerimg">
-                            <ul class="bannerul">
-                                <p class="text1">Hello：</p>
-                                <p class="text2">欢迎来到宿州学院校园短租平台。临近毕业季的</p>
-                                <p class="text3">你，是否有太多的闲置与校友分享，为了追求更好的校园服</p>
-                                <p class="text4">务，我们打造了一个全新的校园平台——<span>宿院短租平台</p>
-                                <p class="text5">这里有更多的闲置分享，更自由的校园话题讨论，你想要的，都在这里。</p>
-                                <p class="text6">加入宿院短租平台，你的大学，应更精彩。</p>
-                            </ul>
-                            <!--   <div class="logoimg">
-                                  <img src="../img/p_logo.jpg" />
-                              </div> -->
+    <div class="main-content">
+        <!--
+
+            描述：右侧banner（图片）部分
+        -->
+        <div class="slider-wapper">
+            <div class="slider"
+                 style="height: 440px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                <ul class="slides" style="height: 400px;">
+                    <li class="active" style="opacity: 1;">
+                        <a href="/goods/homeGoods">
+                            <div class="bannerimg">
+                                <ul class="bannerul">
+                                    <p class="text1">Hello：</p>
+                                    <p class="text2">欢迎来到宿州学院校园短租平台。临近毕业季的</p>
+                                    <p class="text3">你，是否有太多的闲置与校友分享，为了追求更好的校园服</p>
+                                    <p class="text4">务，我们打造了一个全新的校园平台——<span>宿院短租平台</p>
+                                    <p class="text5">这里有更多的闲置分享，更自由的校园话题讨论，你想要的，都在这里。</p>
+                                    <p class="text6">加入宿院短租平台，你的大学，应更精彩。</p>
+                                </ul>
+                                <!--   <div class="logoimg">
+                                      <img src="../img/p_logo.jpg" />
+                                  </div> -->
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--
+
+            描述：最新发布
+        -->
+        <div class="index-title">
+            <a href="">最新发布</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <!--/*@thymesVar id="catelogGoods" type="java.util.Map"*/-->
+                <div class="card col" th:each="item : ${catelogGoods}" th:if="${catelogGoods != null}">
+                    <a href="javascript:void(0)" th:goodsId="${item.key.id}" onclick="getGoodsDetail(this)">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
                         </div>
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
-    </div>
-    <!--
+        <!--
 
-        描述：最新发布
-    -->
-    <div class="index-title">
-        <a href="">最新发布</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <!--/*@thymesVar id="catelogGoods" type="java.util.Map"*/-->
-            <div class="card col" th:each="item : ${catelogGoods}">
-                <a th:href="@{/goods/goodsId/{id}.html(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+            描述：闲置数码
+        -->
+        <div class="index-title">
+            <a href="">闲置数码</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods1}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <!--
+        <!--
 
-        描述：闲置数码
-    -->
-    <div class="index-title">
-        <a href="">闲置数码</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods1}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+            描述：校园代步
+        -->
+        <div class="index-title">
+            <a href="">校园代步</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods2}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <!--
-
-        描述：校园代步
-    -->
-    <div class="index-title">
-        <a href="">校园代步</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods2}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+        <!--
+            电器日用
+        -->
+        <div class="index-title">
+            <a href="">电器日用</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods3}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <!--
-        电器日用
-    -->
-    <div class="index-title">
-        <a href="">电器日用</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods3}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+        <div class="index-title">
+            <a href="">图书教材</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods4}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="index-title">
-        <a href="">图书教材</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods4}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+        <div class="index-title">
+            <a href="">美妆衣物</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods5}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="index-title">
-        <a href="">美妆衣物</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods5}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+        <div class="index-title">
+            <a href="">运动棋牌</a>
+            <hr class="hr1">
+            <hr class="hr2">
+        </div>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods6}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="index-title">
-        <a href="">运动棋牌</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods6}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
-            </div>
+        <div class="index-title">
+            <a href="">票券小物</a>
+            <hr class="hr1">
+            <hr class="hr2">
         </div>
-    </div>
-    <div class="index-title">
-        <a href="">票券小物</a>
-        <hr class="hr1">
-        <hr class="hr2">
-    </div>
-    <div class="waterfoo stark-components row">
-        <div class="item-wrapper normal">
-            <div class="card col" th:each="item : ${catelogGoods7}">
-                <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
-                    <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
-                    </div>
-                    <div class="card-content item-price">
-                        <span th:text="${item.key.price}"></span>
-                    </div>
-                    <div class="card-content item-name">
-                        <p><span th:text="${item.key.name}"></span></p>
-                    </div>
-                    <div class="card-content item-location">
-                        <p>宿州学院</p>
-                        <p th:text="${item.key.startTime}"></p>
-                    </div>
-                </a>
+        <div class="waterfoo stark-components row">
+            <div class="item-wrapper normal">
+                <div class="card col" th:each="item : ${catelogGoods7}">
+                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                        <div class="card-image">
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                        </div>
+                        <div class="card-content item-price">
+                            <span th:text="${item.key.price}"></span>
+                        </div>
+                        <div class="card-content item-name">
+                            <p><span th:text="${item.key.name}"></span></p>
+                        </div>
+                        <div class="card-content item-location">
+                            <p>宿州学院</p>
+                            <p th:text="${item.key.startTime}"></p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<
 </body>
 </html>

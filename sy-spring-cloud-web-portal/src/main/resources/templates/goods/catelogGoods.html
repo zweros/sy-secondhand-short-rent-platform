@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="utf-8"/>
+    <title>宿院短租平台</title>
+    <link rel="icon" href="/img/logo.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/materialize.min.js"></script>
+    <script type="text/javascript" src="/js/index.bundle.js"></script>
+    <link rel="stylesheet" href="/css/materialize-icon.css"/>
+
+<body ng-view="ng-view">
+<!--
+    描述：按物品分类显示对应分类物品
+-->
+<div class="index-title">
+    <a href="" th:text="${catelog.name}" th:if="${catelog != null}"></a>
+    <hr class="hr1">
+    <hr class="hr2">
+</div>
+<div class="waterfoo stark-components row">
+    <div class="item-wrapper normal">
+        <!--/*@thymesVar id="goodsExtendList" type="java.util.Map"*/-->
+        <div class="card col" th:each="item : ${goodsExtendList}">
+            <a href="javascript:void(0)" th:goodsId="${item.key.id}" onclick="getGoodsDetail(this)">
+                <div class="card-image">
+                    <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                </div>
+                <div class="card-content item-price">
+                    <span th:text="${item.key.price}"></span>
+                </div>
+                <div class="card-content item-name">
+                    <p><span th:text="${item.key.name}"></span></p>
+                </div>
+                <div class="card-content item-location">
+                    <p>宿州学院</p>
+                    <p th:text="${item.key.startTime}"></p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

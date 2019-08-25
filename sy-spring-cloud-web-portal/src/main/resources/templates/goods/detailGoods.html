@@ -2,47 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <title>宿院短租平台</title>
-    <link rel="icon" href="/img/logo.jpg" type="image/x-icon"/>
-    <link rel="stylesheet" href="/css/index.css"/>
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/materialize.min.js"></script>
-    <script type="text/javascript" src="/js/index.bundle.js"></script>
-    <link rel="stylesheet" href="/css/materialize-icon.css"/>
-    <link rel="stylesheet" href="/css/detail.css"/>
-    <script>
-        function showLogin() {
-            if ($("#signup-show").css("display") == 'block') {
-                $("#signup-show").css("display", "none");
-            }
-            if ($("#login-show").css("display") == 'none') {
-                $("#login-show").css("display", "block");
-            } else {
-                $("#login-show").css("display", "none");
-            }
-        }
-
-        function showSignup() {
-            if ($("#login-show").css("display") == 'block') {
-                $("#login-show").css("display", "none");
-            }
-            if ($("#signup-show").css("display") == 'none') {
-                $("#signup-show").css("display", "block");
-            } else {
-                $("#signup-show").css("display", "none");
-            }
-        }
-
-        function ChangeName() {
-            if ($("#changeName").css("display") == 'none') {
-                $("#changeName").css("display", "block");
-            } else {
-                $("#changeName").css("display", "none");
-            }
-        }
-    </script>
-
+    <link rel="stylesheet" href="/css/detail.css" />
     <script type="text/javascript">
 
         function addFocus(id) {
@@ -56,22 +16,15 @@
             window.location.href = '/goods/buyId/' + id
         }
 
-        $(function(){
-            //加载头部
-            $("#homeGoods-header").load("/goods/goodsHeader");
-        });
-
     </script>
 
 
 <body ng-view="ng-view">
-<!--加载头部-->
-<div id="homeGoods-header"></div>
 
 <!--显示商品详情-->
 <div ng-controller="detailBoxController" class="detail-box stark-components z-depth-1 row ng-scope">
     <div class="col s12 path">
-        <a href="/goods/catelog/${catelog.id}">${catelog.name}</a>
+        <a  th:href="@{/goods/catelog/{id}(id=${catelog.id})}" th:text="${catelog.name}"></a>
         <em>></em>
         <!--/*@thymesVar id="goods" type="java.lang.String"*/-->
         <a th:text="${goods.name}"></a>

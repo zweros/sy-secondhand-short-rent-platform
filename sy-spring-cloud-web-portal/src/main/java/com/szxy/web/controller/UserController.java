@@ -16,6 +16,9 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  用户 Controller
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -41,8 +44,10 @@ public class UserController {
      * @param password
      */
     @RequestMapping(value="/addUser",method= RequestMethod.POST)
-    public void addUser(String username,String phone,String password){
+    public String addUser(String username,String phone,String password){
+        // TODO: 2019/8/25  没有注册成功或者失败的提示
         this.userService.addUserService(username,phone,password);
+        return "redirect:/goods/homeGoods.html";
     }
 
     /**
@@ -54,9 +59,31 @@ public class UserController {
     @RequestMapping(value="/login",method= RequestMethod.POST)
     public String userLogin(String phone, String password, HttpSession session,HttpServletResponse resp){
         User user = this.userService.userLoginService(phone, password, resp);
-        //暂时存放在 session 中
+        // TODO: 2019/8/25 暂时存放在 session 中
         session.setAttribute("cur_user",user);
         System.out.println("user:登录用户："+user);
         return "redirect:/goods/homeGoods.html";
     }
+
+    /**
+     * 用户登录密码检查
+     * @param phone
+     * @param password
+     * @return
+     */
+    @RequestMapping(value="/password",method= RequestMethod.POST)
+    @ResponseBody
+    public Map<String,String> userPasswordCheck(String phone, String password){
+         return this.userService.userPasswordCheckService(phone,password);
+    }
+
+    /**
+     * 用户退出
+     */
+    @RequestMapping(value="/logout",method= RequestMethod.GET)
+    public String userLogout(HttpSession session){
+        session.invalidate();// 清空 session
+        return "redirect:/goods/homeGoods.html";
+    }
+
 }

@@ -58,4 +58,15 @@ public class UserServiceImpl {
         }
         return null;
     }
+
+    public Map<String,String> userPasswordCheckService(String phone, String password) {
+        User user = this.userService.userLoginService(phone, password);
+        Map<String, String> map = new HashMap<>();
+        if(user != null){
+            map.put("flag","true");
+        }else{
+            map.put("flag","false");
+        }
+        return map;
+    }
 }

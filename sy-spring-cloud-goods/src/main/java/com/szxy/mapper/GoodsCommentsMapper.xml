@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szxy.mapper.GoodsCommentsMapper">
+
+    <resultMap id="cmtMap" type="Comments">
+        <id column="id" property="id" />
+        <result column="create_at" property="createAt"/>
+        <result column="goodsId" property="goodsId"/>
+        <result column=" " property=""/>
+        <result column=" " property=""/>
+        <result column=" " property=""/>
+
+    </resultMap>
+
+    <select id="selCommentsByGoodsId"  resultMap="cmtMap">
+        select id,user_id as userId,goods_id as goodsId,content,create_at as createAt
+        from  comments
+        where  goods_id = 97
+    </select>
+
+</mapper>
