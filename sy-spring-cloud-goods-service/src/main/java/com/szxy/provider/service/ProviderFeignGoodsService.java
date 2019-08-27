@@ -1,10 +1,10 @@
 package com.szxy.provider.service;
 
 import com.szxy.pojo.Goods;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import sun.misc.Request;
 
 import java.util.List;
 
@@ -28,8 +28,16 @@ public interface ProviderFeignGoodsService {
      * @param id
      * @return
      */
-    @RequestMapping(value="/good/",method = RequestMethod.GET)
+    @RequestMapping(value="/good",method = RequestMethod.GET)
     public Goods findByGoodIdService(@RequestParam(value="id") Integer id);
 
+    @RequestMapping(value="/addGoods",method = RequestMethod.POST)
+    public void addGoodsService(@RequestBody Goods goods);
+
+    @RequestMapping(value="/searchGoods",method = RequestMethod.GET)
+    List<Goods> searchGoodsService(@RequestParam("str") String str);
+
+    @RequestMapping(value="/findUserPublishedAllGoods",method = RequestMethod.GET)
+    List<Goods> findUserPublishedAllGoodsService(@RequestParam("userId") Integer userId);
 
 }

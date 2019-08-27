@@ -1,11 +1,12 @@
 package com.szxy.web.controller;
 
+import com.szxy.pojo.GoodsExtend;
 import com.szxy.pojo.User;
-import com.szxy.service.UserService;
+import com.szxy.service.impl.GoodsServiceImpl;
 import com.szxy.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +26,8 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private GoodsServiceImpl goodsService;
 
     /**
      * 登录用户手机名检查
@@ -60,6 +63,7 @@ public class UserController {
     public String userLogin(String phone, String password, HttpSession session,HttpServletResponse resp){
         User user = this.userService.userLoginService(phone, password, resp);
         // TODO: 2019/8/25 暂时存放在 session 中
+        user.setPassword(null);
         session.setAttribute("cur_user",user);
         System.out.println("user:登录用户："+user);
         return "redirect:/goods/homeGoods.html";
@@ -84,6 +88,26 @@ public class UserController {
     public String userLogout(HttpSession session){
         session.invalidate();// 清空 session
         return "redirect:/goods/homeGoods.html";
+    }
+
+    /**
+     * 显示用户主页
+     * @return
+     */
+    @RequestMapping(value="/home",method= RequestMethod.GET)
+    public String userHome(){
+        return "/user/home";
+    }
+
+    /**
+     * 显示用户发布的物品
+     * @return
+     */
+    @RequestMapping(value="/allGoods",method= RequestMethod.GET)
+    public String userPublishedAllGoods(HttpServletRequest req, Model model){
+        List<GoodsExtend> goodsExtendList = this.goodsService.findUserPublishedAllGoods(req);
+        model.addAttribute("goodsExtendList",goodsExtendList);
+        return "/user/goods";
     }
 
 }

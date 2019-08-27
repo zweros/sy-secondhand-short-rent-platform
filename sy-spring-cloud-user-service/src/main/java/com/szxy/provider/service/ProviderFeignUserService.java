@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.print.attribute.standard.Media;
-
 @RequestMapping("/user")
 public interface ProviderFeignUserService {
 
@@ -50,5 +48,8 @@ public interface ProviderFeignUserService {
     @RequestMapping(value="/getSellerInfo",method = RequestMethod.POST,
                 consumes = MediaType.APPLICATION_JSON_VALUE+";charset=utf-8")
     public User findSellerInfoByIdService(@RequestParam("id") Integer id);
+
+
+
 
 }

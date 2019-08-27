@@ -16,4 +16,9 @@ public class ProviderGoodsImageServiceImpl implements ProviderGoodsImageService 
     public Image findGoodsImageByGoodIdService(Integer goodId) {
         return this.goodsImageMapper.selGoodsImageByGoodId(goodId);
     }
+
+    @Override
+    public void addGoodsImageService(Image image) {
+        this.goodsImageMapper.insertImageMapper(image);
+    }
 }

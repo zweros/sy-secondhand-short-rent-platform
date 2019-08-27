@@ -1,19 +1,17 @@
 package com.szxy.web.controller;
 
 
-import com.netflix.discovery.converters.Auto;
-import com.szxy.pojo.Catelog;
-import com.szxy.pojo.Goods;
-import com.szxy.pojo.Image;
+import com.szxy.pojo.*;
 import com.szxy.service.impl.GoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +32,10 @@ public class GoodsController {
         List<Map<Goods, Image>> list = this.goodsService.findAllCatelogGoods();
         for (int i = 0; i < 8; i++) {
             model.addAttribute(i==0?"catelogGoods":"catelogGoods"+i,list.get(i));
+            //System.out.println(list.get(i));
         }
+        List<Catelog> catelogs = this.goodsService.getAllCatelog();
+        model.addAttribute("catelogs",catelogs);
         return "/goods/homeGoods";
     }
 
@@ -45,13 +46,7 @@ public class GoodsController {
      */
     @RequestMapping(value="/goodsId/{id}.html")
     public String showDetailGoods(@PathVariable  Integer id,Model model){
-        Map<String,Object> map = this.goodsService.findDetailGoods(id);
-        Catelog catelog =
-                this.goodsService.findCatelogInfoById(((Goods) map.get("goods")).getCatelogId());
-        model.addAttribute("goods",map.get("goods"));
-        model.addAttribute("img",map.get("img"));
-        model.addAttribute("seller",map.get("seller"));
-        model.addAttribute("catelog",catelog);
+        this.goodsService.findDetailGoods(id,model);
         return "/goods/detailGoods";
     }
 
@@ -72,5 +67,83 @@ public class GoodsController {
         return "/goods/catelogGoods";
     }
 
+    /**
+     * 加载物品评论模块
+     * @return
+     */
+    @RequestMapping(value = "/detailGoodsComments/{goodsId}",method = RequestMethod.GET)
+    public String showComments(@PathVariable Integer goodsId,Model model){
+        List<Comments> comments = this.goodsService.getCmtByGoodsIdService(goodsId);
+        model.addAttribute("goodsId",goodsId);
+        model.addAttribute("comments",comments);
+        return "/goods/detailGoodsComments";
+    }
+
+
+    /**
+     * 添加评论
+     * @param comment         Comments 对象
+     * @param goods_id       被评论物品的 ID
+     * @param req           HttpServletRequest 对象
+     * @return
+     */
+    @RequestMapping(value="/addComments",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,String> addComments(Comments comment,
+                                          Integer goods_id,
+                                          HttpServletRequest req){
+        comment.setGoodsId(goods_id);
+        Map<String,String> map = this.goodsService.addCommentsService(comment,req);
+        return map;
+    }
+
+    /**
+     * 显示我要发布页面
+     * @return
+     */
+    @RequestMapping(value="/publishGoods",method = RequestMethod.GET)
+    public String publishGoods(){
+        return "redirect:/user/allGoods";
+    }
+
+    /**
+     * 提交发布物品的信息
+     * @param goods
+     * @return
+     */
+    @RequestMapping(value="/publishGoodsSubmit",method = RequestMethod.POST)
+    public String publishGoodsSubmit(Goods goods,MultipartFile myfile,HttpServletRequest req){
+        this.goodsService.addGoodsAndImg(goods,myfile,req);
+        return "/goods/pubGoods";
+    }
+
+    /**
+     * 上传物品图片
+     * @return
+     */
+     @RequestMapping(value="/uploadFile",method = RequestMethod.POST)
+     @ResponseBody
+    public Map<String, Object> uploadFile(MultipartFile myfile) {
+         System.out.println(myfile.getOriginalFilename());
+         Map<String, Object> map = new HashMap<>();
+         map.put("response","http://test/");
+         return map;
+     }
+
+    /**
+     *
+     * @param str  搜索关键字
+     * @return
+     */
+     @RequestMapping(value="/search",method = RequestMethod.POST)
+    public String searchGoods(String str,Model model) {
+         List<GoodsExtend>  goodsExtendList = this.goodsService.searchGoodsService(str);
+         model.addAttribute("goodsExtendList",goodsExtendList);
+         return "/goods/searchGoods";
+     }
+
+
+
 
 }
+

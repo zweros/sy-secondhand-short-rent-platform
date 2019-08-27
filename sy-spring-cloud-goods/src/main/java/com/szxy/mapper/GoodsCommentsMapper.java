@@ -1,6 +1,7 @@
 package com.szxy.mapper;
 
 import com.szxy.pojo.Comments;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.List;
  **/
 public interface GoodsCommentsMapper {
 
-    List<Comments> selCommentsByGoodsId(Integer goodid);
+    List<Comments> selCommentsByGoodsId(@Param("goodId") Integer goodId);
 
+    List<Comments> selCommentsByUserId(@Param("userId") Integer userId);
+
+    int insertCommentsMapper(Comments comment);
 }

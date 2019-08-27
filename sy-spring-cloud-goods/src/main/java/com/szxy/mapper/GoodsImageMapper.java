@@ -1,6 +1,7 @@
 package com.szxy.mapper;
 
 import com.szxy.pojo.Image;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -12,4 +13,6 @@ public interface GoodsImageMapper {
             " where goods_id = #{goodId}")
     public Image selGoodsImageByGoodId(@Param("goodId") Integer goodId);
 
+    @Insert("insert into image values(default,#{goodsId},#{imgUrl})")
+    void insertImageMapper(Image image);
 }

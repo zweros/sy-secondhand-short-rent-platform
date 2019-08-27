@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+<body ng-view="ng-view">
+
+<div class="main-content">
+    <!--
+        描述：最新发布
+    -->
+    <div class="index-title">
+        <a href="">搜索结果</a>
+        <hr class="hr1">
+        <hr class="hr2">
+    </div>
+    <div class="waterfoo stark-components row">
+        <div class="item-wrapper normal">
+            <!--/*@thymesVar id="catelogGoods" type="java.util.Map"*/-->
+            <div class="card col" th:each="item : ${goodsExtendList}" th:if="${goodsExtendList != null}">
+                <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.goods.id}+')'">
+                    <div class="card-image">
+                        <img th:src="@{/upload/{id}(id=${item.images[0].imgUrl})}" th:if="${item != null and ! #strings.startsWith(item.images[0].imgUrl,'http://')}"/>
+                        <img th:src="@{{imgUrl}(imgUrl=${item.images[0].imgUrl})}" th:if="${item != null and #strings.contains(item.images[0].imgUrl,'sysecondhandmarket')}"/>
+                    </div>
+                    <div class="card-content item-price">
+                        <span th:text="${item.goods.price}"></span>
+                    </div>
+                    <div class="card-content item-name">
+                        <p><span th:text="${item.goods.name}"></span></p>
+                    </div>
+                    <div class="card-content item-location">
+                        <p>宿州学院</p>
+                        <p th:text="${item.goods.startTime}"></p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.szxy.service.impl;
 import com.szxy.pojo.User;
 import com.szxy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  *  用户
@@ -25,6 +27,8 @@ public class UserServiceImpl {
     private UserService userService;
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
+    @Value("${TTL_USER_TOKEN_DAYS}")
+    private Long TTL_USER_TOKEN_DAYS;
 
     public Map<String,Object> userRegistryCheck(String phone){
         Map<String,Object> map =
@@ -47,13 +51,15 @@ public class UserServiceImpl {
         if(user != null){
             String token = UUID.randomUUID().toString();
             Cookie cookie = new Cookie("token",token);
-            cookie.setMaxAge(60*30);
+            cookie.setMaxAge(60*60*7);
             cookie.setPath("/");
             resp.addCookie(cookie);
             //更换 redis 序列化器
             this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+            //清空密码
+            user.setPassword(null);
             //将 user 数据放入 redis 中
-            this.redisTemplate.opsForValue().set(token,user);
+            this.redisTemplate.opsForValue().set(token,user,TTL_USER_TOKEN_DAYS, TimeUnit.DAYS);
             return user;
         }
         return null;

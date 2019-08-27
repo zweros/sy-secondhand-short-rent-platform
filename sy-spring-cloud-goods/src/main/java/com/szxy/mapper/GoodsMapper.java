@@ -23,4 +23,23 @@ public interface GoodsMapper {
      */
     public Goods selByGoodId(@Param("id")Integer id);
 
+    /**
+     * 添加物品
+     * @param goods
+     */
+    void insertGoodsMapper(Goods goods);
+
+    /**
+     * 模糊查询物品
+     * @param str
+     * @return
+     */
+    List<Goods> findGoodsByNameMapper(@Param("name")String str);
+
+    /**
+     * 查找用户已发布的闲置物品
+     * @param userId
+     * @return
+     */
+    List<Goods> selUserPublishedAllGoodsMapper(@Param("userId")Integer userId);
 }

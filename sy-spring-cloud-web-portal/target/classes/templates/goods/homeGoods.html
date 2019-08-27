@@ -15,16 +15,26 @@
         $(document).ready(function () {
             //加载头部,不加参数发送 Get 请求
             $("#homeGoods-header").load("/goods/goodsHeader");
+            $("#homeGoods-ng").load("/goods/catelogNavigation");
         });
 
-        function getGoodsDetail(thi) {
-            //alert($(thi).attr("goodsid"));
-            var goodsId = $(thi).attr("goodsid");
-            $("#homeGoods-content").load("/goods/goodsId/" + goodsId + ".html");
+        //获取物品详情页面
+        function getGoodsDetail(goodsId) {
+            $("#homeGoods-content").load("/goods/goodsId/" + goodsId + ".html",function (data) {
+                  //alert(data);
+            });
         }
 
-        function getGoodsByCid(cid){
+        //获取分类物品
+        function getGoodsByCid(cid) {
             $(".main-content").load("/goods/catelog/" + cid + ".html");
+        }
+
+        //获取搜索物品
+        function getSeareachGoods(){
+            var str = $(":text").val();
+            $(".main-content").load("/goods/search",{str:str});
+            return false;//阻止表单提交
         }
 
 
@@ -38,77 +48,14 @@
     <!--
     描述：左侧导航条
     -->
-    <div ng-controller="sidebarController" class="sidebar stark-components ng-scope">
-        <li ng-class="{true: 'active'}[isAll]">
-            <!--<a href="/goods/catelog" class="index">-->
-            <!-- 0  表示查询全部   -->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(0)" class="index">
-                <img src="/img/index.png">
-                <em>最新发布</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isDigital]">
-            <!--<a href="/goods/catelog/1" class="digital">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(1)" class="digital">
-                <img src="/img/digital.png"/>
-                <em>闲置数码</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isRide]">
-            <!--<a href="/goods/catelog/2" class="ride">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(2)" class="ride">
-                <img src="/img/ride.png"/>
-                <em>校园代步</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isCommodity]">
-            <!--<a href="/goods/catelog/3" class="commodity">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(3)" class="commodity">
-                <img src="/img/commodity.png"/>
-                <em>电器日用</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isBook]">
-           <!-- <a href="/goods/catelog/4" class="book">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(4)" class="book">
-                <img src="/img/book.png"/>
-                <em>图书教材</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isMakeup]">
-            <!--<a href="/goods/catelog/5" class="makeup">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(5)" class="makeup">
-                <img src="/img/makeup.png"/>
-                <em>美妆衣物</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isSport]">
-            <!--<a href="/goods/catelog/6" class="sport">-->
-            <a href="javaScript:void(0)" onclick="getGoodsByCid(6)" class="sport">
-                <img src="/img/sport.png"/>
-                <em>运动棋牌</em>
-            </a>
-        </li>
-        <li ng-class="{true: 'active'}[isSmallthing]">
-                <!-- <a href="/goods/catelog/7" class="smallthing">-->
-                <a href="javaScript:void(0)" onclick="getGoodsByCid(7)" class="smallthing">
-                <img src="/img/smallthing.png"/>
-                <em>票券小物</em>
-            </a>
-        </li>
-        <div class="info">
-            <a href="" target="_blank">关于我们</a><em>-</em>
-            <a href="">联系我们</a>
-            <p>©2019 宿院短租平台</p>
-        </div>
+    <div ng-controller="sidebarController" class="sidebar stark-components ng-scope" id="homeGoods-ng">
+        <!-- js 加载物品目录信息 -->
     </div>
     <!--
-
         描述：右侧显示部分
     -->
     <div class="main-content">
         <!--
-
             描述：右侧banner（图片）部分
         -->
         <div class="slider-wapper">
@@ -136,7 +83,6 @@
             </div>
         </div>
         <!--
-
             描述：最新发布
         -->
         <div class="index-title">
@@ -148,9 +94,10 @@
             <div class="item-wrapper normal">
                 <!--/*@thymesVar id="catelogGoods" type="java.util.Map"*/-->
                 <div class="card col" th:each="item : ${catelogGoods}" th:if="${catelogGoods != null}">
-                    <a href="javascript:void(0)" th:goodsId="${item.key.id}" onclick="getGoodsDetail(this)">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.contains(item.value.imgUrl,'sysecondhandmarket')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -166,6 +113,7 @@
                 </div>
             </div>
         </div>
+
         <!--
 
             描述：闲置数码
@@ -178,9 +126,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods1}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -197,7 +146,6 @@
             </div>
         </div>
         <!--
-
             描述：校园代步
         -->
         <div class="index-title">
@@ -208,9 +156,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods2}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                             <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -237,9 +186,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods3}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -263,9 +213,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods4}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                             <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -289,9 +240,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods5}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                             <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -315,9 +267,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods6}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                             <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>
@@ -341,9 +294,10 @@
         <div class="waterfoo stark-components row">
             <div class="item-wrapper normal">
                 <div class="card col" th:each="item : ${catelogGoods7}">
-                    <a th:href="@{/goods/goodsId/{id}(id=${item.key.id})}">
+                    <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                         <div class="card-image">
-                            <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                             <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                            <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                         </div>
                         <div class="card-content item-price">
                             <span th:text="${item.key.price}"></span>

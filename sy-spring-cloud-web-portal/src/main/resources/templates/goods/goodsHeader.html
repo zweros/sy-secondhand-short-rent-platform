@@ -92,17 +92,17 @@
 <div ng-controller="headerController" class="header stark-components navbar-fixed ng-scope">
     <nav class="white nav1">
         <div class="nav-wrapper">
-            <a th:href="@{/goods/homeGoods.html}" class="logo">
+            <a th:href="@{/}" class="logo">
                 <em class="em1">宿院</em>
                 <em class="em2">短租平台</em>
                 <em class="em3">SZXY.RentMarket</em>
             </a>
             <div class="nav-wrapper search-bar">
-                <form class="ng-pristine ng-invalid ng-invalid-required" action="/goods/search">
+                <form class="ng-pristine ng-invalid ng-invalid-required" action="/goods/search" onsubmit="return getSeareachGoods()">
                     <div class="input-field">
                         <input id="search" name="str" placeholder="搜点什么吧..." style="height: 40px;"
                                class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"/>
-                        <input type="submit" class="btn" value="搜索"></input>
+                        <input type="submit" class="btn" value="搜索" />
                         <label for="search" class="active">
                             <i ng-click="search()" class="iconfont"></i>
                         </label>

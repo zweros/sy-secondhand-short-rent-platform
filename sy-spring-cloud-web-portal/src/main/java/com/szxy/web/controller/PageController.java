@@ -9,17 +9,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class PageController {
 
     @RequestMapping("/{page}")
-    public String showPage(@PathVariable String page){
+    public String showPage(@PathVariable String page) {
         return page;
     }
 
     /**
      * 加载网页首部 html 代码
+     *
      * @return
      */
-    @RequestMapping(value="/goods/goodsHeader",method= RequestMethod.GET)
-    private String loadGoodsHeader(){
+    @RequestMapping(value = "/goods/goodsHeader", method = RequestMethod.GET)
+    public String loadGoodsHeader() {
         return "/goods/goodsHeader";
     }
+
+    /**
+     *  显示首页
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/","/goods/homeGoods"}, method = RequestMethod.GET)
+    public String showHome() {
+        return "forward:/goods/homeGoods.html";
+    }
+
+    /**
+     * 加载导航栏信息
+     * @return
+     */
+    @RequestMapping(value = "/goods/catelogNavigation", method = RequestMethod.GET)
+    public String showCatelogNavigation() {
+        return "/goods/catelogNavigation";
+    }
+
 
 }

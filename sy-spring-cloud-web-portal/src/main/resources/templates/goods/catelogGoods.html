@@ -24,9 +24,10 @@
     <div class="item-wrapper normal">
         <!--/*@thymesVar id="goodsExtendList" type="java.util.Map"*/-->
         <div class="card col" th:each="item : ${goodsExtendList}">
-            <a href="javascript:void(0)" th:goodsId="${item.key.id}" onclick="getGoodsDetail(this)">
+            <a href="javascript:void(0)"  th:onclick="'javascript:getGoodsDetail('+${item.key.id}+')'">
                 <div class="card-image">
-                    <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}"/>
+                    <img th:src="@{/upload/{id}(id=${item.value.imgUrl})}" th:if="${item.value != null and ! #strings.startsWith(item.value.imgUrl,'http://')}"/>
+                    <img th:src="@{{imgUrl}(imgUrl=${item.value.imgUrl})}" th:if="${item.value != null and #strings.startsWith(item.value.imgUrl,'http://')}"/>
                 </div>
                 <div class="card-content item-price">
                     <span th:text="${item.key.price}"></span>

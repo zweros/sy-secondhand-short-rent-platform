@@ -4,6 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.szxy.mapper.GoodsMapper">
 
+    <sql id="goodSql">
+        id,catelog_id,user_id,name,price,real_price,start_time,
+		polish_time,end_time,describle,status
+    </sql>
+
     <resultMap id="goodsMap" type="Goods">
         <id column="id" property="id" />
         <result column="catelog_id" property="catelogId" />
@@ -19,7 +24,9 @@
     </resultMap>
 
     <select id="selByCatelogGoodsId"  resultMap="goodsMap">
-        select * from goods where status = 1
+        select
+            <include refid="goodSql" />
+        from goods where status = 1
         <if test="cateid != null">
              and catelog_id = #{cateid}
         </if>
@@ -30,7 +37,27 @@
     </select>
 
     <select id="selByGoodId" parameterType="int" resultMap="goodsMap">
-        select * from goods where id = #{id}
+        select  <include refid="goodSql" />
+        from goods
+        where id = #{id} and status = 1
+    </select>
+
+    <insert id="insertGoodsMapper" parameterType="Goods">
+        insert into goods
+        values(#{id},#{catelogId},#{userId},#{name},#{price},#{realPrice},#{startTime},#{polishTime},#{endTime},#{describle},#{status})
+    </insert>
+
+    <select id="findGoodsByNameMapper" parameterType="string" resultMap="goodsMap">
+        	select
+             <include refid="goodSql" />
+            from goods
+            where status = 1 and name like concat(#{name},'%')
+    </select>
+
+    <select id="selUserPublishedAllGoodsMapper" parameterType="int" resultMap="goodsMap">
+            select  <include refid="goodSql" />
+            from goods
+            where user_id = #{userId} and status = 1
     </select>
 
 </mapper>

@@ -1,18 +1,19 @@
 package com.szxy.web.controller;
 
 import com.szxy.pojo.Catelog;
+import com.szxy.pojo.Comments;
 import com.szxy.pojo.Goods;
 import com.szxy.pojo.Image;
 import com.szxy.provider.service.ProviderFeignGoodsCatelogService;
+import com.szxy.provider.service.ProviderFeignGoodsCommentsService;
 import com.szxy.provider.service.ProviderFeignGoodsImageService;
 import com.szxy.provider.service.ProviderFeignGoodsService;
 import com.szxy.service.ProviderGoodsCatelogService;
-import com.szxy.service.ProviderGoodsImageService;
+import com.szxy.service.ProviderGoodsCommentsService;
 import com.szxy.service.ProviderGoodsService;
 import com.szxy.service.impl.ProviderGoodsImageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,8 @@ import java.util.List;
 @RestController
 public class GoodsController implements ProviderFeignGoodsService,
                 ProviderFeignGoodsImageService ,
-                 ProviderFeignGoodsCatelogService {
+                ProviderFeignGoodsCatelogService,
+                ProviderFeignGoodsCommentsService {
 
     @Autowired
     private ProviderGoodsService providerGoodsService;
@@ -29,6 +31,9 @@ public class GoodsController implements ProviderFeignGoodsService,
     private ProviderGoodsImageServiceImpl goodsImageService;
     @Autowired
     private ProviderGoodsCatelogService providerGoodsCatelogService;
+    @Autowired
+    private ProviderGoodsCommentsService providerGoodsCommentsService;
+
     /**
      * 根据物品类别查询商品信息
      * @param cateid 物品类别
@@ -52,6 +57,21 @@ public class GoodsController implements ProviderFeignGoodsService,
         return this.providerGoodsService.findByGoodIdService(id);
     }
 
+    @Override
+    public void addGoodsService(@RequestBody Goods goods) {
+         this.providerGoodsService.addGoodsService(goods);
+    }
+
+    @Override
+    public List<Goods> searchGoodsService(String str) {
+        return this.providerGoodsService.searchGoodsService(str);
+    }
+
+    @Override
+    public List<Goods> findUserPublishedAllGoodsService(@RequestParam("userId") Integer userId) {
+        return this.providerGoodsService.findUserPublishedAllGoodsService(userId);
+    }
+
     /**
      * 根据物品 ID 查询物品的图片信息
      * @param goodId
@@ -60,6 +80,15 @@ public class GoodsController implements ProviderFeignGoodsService,
     @Override
     public Image findGoodsImageByGoodIdService(@RequestParam("goodId") Integer goodId) {
         return this.goodsImageService.findGoodsImageByGoodIdService(goodId);
+    }
+
+    /**
+     * 添加商品图片信息
+     * @param image
+     */
+    @Override
+    public void addGoodsImageService(@RequestBody  Image image) {
+        this.goodsImageService.addGoodsImageService(image);
     }
 
     /**
@@ -79,5 +108,30 @@ public class GoodsController implements ProviderFeignGoodsService,
     @Override
     public Catelog findCatelogByIdService(@RequestParam(value="id")Integer id) {
         return this.providerGoodsCatelogService.findCatelogById(id);
+    }
+
+    /**
+     * 根据物品的 ID 查询对应评论
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public List<Comments> findCommentsByGoodsIdService(@RequestParam("goodsId") Integer goodsId) {
+        return this.providerGoodsCommentsService.findCommentsByGoodsIdService(goodsId);
+    }
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Comments> findCommentsByUserIdService(@RequestParam("userId") Integer userId) {
+        return this.providerGoodsCommentsService.findCommentsByUserIdService(userId);
+    }
+
+    @Override
+    public boolean addCommentsService(@RequestBody Comments comment) {
+        return this.providerGoodsCommentsService.addCommentsService(comment);
     }
 }
