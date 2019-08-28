@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 /**
  * 服务消费者   假的接口实现类
  */
@@ -31,6 +32,9 @@ public class GoodsServiceImpl {
     private  String REDIS_HOMEGOODS_SHOW_KEY ;
     @Value("${DEFAULT_CATELOG_NAME}")
     private String DEFAULT_CATELOG_NAME;
+    //用户 cookie 令牌 token
+    @Value("${COOKIE_USER_TOKEN_NAME}")
+    private String COOKIE_USER_TOKEN_NAME;
     @Value("${FTP_HOST}")
     private String FTP_HOST;
     @Value("${FTP_PROT}")
@@ -201,7 +205,7 @@ public class GoodsServiceImpl {
         //再利用 token 从 Redis 缓存查找用户信息
         if(cookies != null  && cookies.length > 0){
             for (Cookie cookie : cookies) {
-                if(cookie.getName().equals("token")){
+                if(cookie.getName().equals(COOKIE_USER_TOKEN_NAME)){
                     // 判断
                     // 更换序列化器
                     this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
@@ -226,6 +230,7 @@ public class GoodsServiceImpl {
         return map;
     }
 
+
     /**
      * 添加物品和物品图片
      * @param goods
@@ -233,10 +238,14 @@ public class GoodsServiceImpl {
      */
     public void addGoodsAndImg(Goods goods, MultipartFile myfile,HttpServletRequest req) {
         Date date = new Date();
-        String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        goods.setStartTime(dateStr);
+
+        String StartTimeStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        goods.setStartTime(StartTimeStr);
         goods.setPolishTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
-        goods.setEndTime(dateStr);
+        GregorianCalendar calendar = new GregorianCalendar();//获取当前日历日期
+        calendar.add(GregorianCalendar.MONTH,1); //往后推一个月
+        String endTimeStr = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());//将往后推的一个月的日期转为字符串
+        goods.setEndTime(endTimeStr);
         goods.setStatus(1);
         //获取用户 ID
         Cookie[] cookies = req.getCookies();
@@ -244,7 +253,7 @@ public class GoodsServiceImpl {
         //再利用 token 从 Redis 缓存查找用户信息
         if(cookies != null  && cookies.length > 0) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
+                if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
                     // 更换序列化器
                     this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
                     User user = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
@@ -330,7 +339,7 @@ public class GoodsServiceImpl {
         //再利用 token 从 Redis 缓存查找用户信息
         if(cookies != null  && cookies.length > 0){
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
+                if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
                     // 更换序列化器
                     this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
                     Object userJson = this.redisTemplate.opsForValue().get(cookie.getValue());
@@ -355,5 +364,67 @@ public class GoodsServiceImpl {
             }
         }
         return null;
+    }
+
+    public void addGoodFocusService(Integer goodId, HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null  && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
+                    this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+                    User user = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
+                    if(user != null){
+                        //添加物品关注
+                        this.userService.addGoodsFocusService(goodId,user.getId());
+                    }
+                }
+            }
+        }
+    }
+
+    public List<GoodsExtend> findGoodFocusService(HttpServletRequest req) {
+        List<GoodsExtend> goodsExtendList = new ArrayList<>();
+        //获取用户 ID
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null  && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
+                    // 更换序列化器
+                    this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+                    User user = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
+                    if(user != null){
+                        Integer userId= user.getId();
+                        List<Focus> focusList = this.userService.findGoodsFocusByUserIdService(userId);
+                        for (Focus focus : focusList) {
+                            Goods goods  = this.goodsService.findByGoodIdService(focus.getGoodsId());
+                            Image image = this.goodsImageService.findGoodsImageByGoodIdService(goods.getId());
+                            ArrayList<Image> imageList = new ArrayList<>();
+                            imageList.add(image);
+                            GoodsExtend goodsExtend = new GoodsExtend();
+                            goodsExtend.setGoods(goods);
+                            goodsExtend.setImages(imageList);
+                            goodsExtendList.add(goodsExtend);
+                        }
+                    }
+                }
+            }
+        }
+        return goodsExtendList;
+    }
+
+    public GoodsExtend preUpdateGoodsService(Integer goodId) {
+        GoodsExtend goodsExtend = new GoodsExtend();
+        Goods goods = this.goodsService.findByGoodIdService(goodId);
+        Image image =
+                this.goodsImageService.findGoodsImageByGoodIdService(goods.getId());
+        ArrayList<Image> images = new ArrayList<>();
+        images.add(image);
+        goodsExtend.setGoods(goods);
+        goodsExtend.setImages(images);
+        return goodsExtend;
+    }
+
+    public void updateGoodService(Goods goods) {
+        this.goodsService.updateGoodsService(goods);
     }
 }

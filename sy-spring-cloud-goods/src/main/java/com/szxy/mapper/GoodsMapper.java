@@ -42,4 +42,6 @@ public interface GoodsMapper {
      * @return
      */
     List<Goods> selUserPublishedAllGoodsMapper(@Param("userId")Integer userId);
+
+    void updateGoodsMapper(Goods goods);
 }

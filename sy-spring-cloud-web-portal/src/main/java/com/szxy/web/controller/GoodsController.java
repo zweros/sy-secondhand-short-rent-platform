@@ -103,7 +103,7 @@ public class GoodsController {
      */
     @RequestMapping(value="/publishGoods",method = RequestMethod.GET)
     public String publishGoods(){
-        return "redirect:/user/allGoods";
+        return "goods/pubGoods";
     }
 
     /**
@@ -114,7 +114,7 @@ public class GoodsController {
     @RequestMapping(value="/publishGoodsSubmit",method = RequestMethod.POST)
     public String publishGoodsSubmit(Goods goods,MultipartFile myfile,HttpServletRequest req){
         this.goodsService.addGoodsAndImg(goods,myfile,req);
-        return "/goods/pubGoods";
+        return "redirect:/user/allGoods"; //发布成功后跳转的页面
     }
 
     /**
@@ -131,7 +131,7 @@ public class GoodsController {
      }
 
     /**
-     *
+     * 搜索物品
      * @param str  搜索关键字
      * @return
      */
@@ -143,6 +143,41 @@ public class GoodsController {
      }
 
 
+    /**
+     * 删除物品，不真正删除，仅把物品做下架处理
+     * @param goodId
+     * @return
+     */
+    @RequestMapping(value="/deleteGoods/{goodId}",method = RequestMethod.DELETE)
+    public String deleteGoods(@PathVariable Integer goodId) {
+        // TODO: 2019/8/28  删除
+         return "/user/home";
+     }
+
+    /**
+     * 预更新物品信息
+     * @param goodId
+     * @return
+     */
+    @RequestMapping(value="/editGoods/{goodId}",method = RequestMethod.GET)
+     public String editGoods(@PathVariable Integer goodId,Model model) {
+         GoodsExtend goodsExtend
+                 = this.goodsService.preUpdateGoodsService(goodId);
+         model.addAttribute("goodsExtend",goodsExtend);
+         return "/goods/editGoods";
+     }
+
+    /**
+     * 更新物品信息
+     * @param goods
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/editGoodsSubmit",method = RequestMethod.POST)
+     public String editGoodsSubmit(Goods goods,Model model) {
+        this.goodsService.updateGoodService(goods);
+         return "/user/home";
+     }
 
 
 }

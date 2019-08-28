@@ -72,6 +72,11 @@ public class GoodsController implements ProviderFeignGoodsService,
         return this.providerGoodsService.findUserPublishedAllGoodsService(userId);
     }
 
+    @Override
+    public void updateGoodsService(@RequestBody  Goods goods) {
+        this.providerGoodsService.updateGoodsService(goods);
+    }
+
     /**
      * 根据物品 ID 查询物品的图片信息
      * @param goodId

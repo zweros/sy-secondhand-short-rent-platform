@@ -66,13 +66,6 @@
             </div>
             <div class="home_nav">
                 <ul>
-                    <a href="/orders/myOrders">
-                        <li class="notice">
-                            <div></div>
-                            <span>订单中心</span>
-                            <strong></strong>
-                        </li>
-                    </a>
                     <a href="/user/allFocus">
                         <li class="fri">
                             <div></div>
@@ -119,7 +112,6 @@
                         <span>没有任何内容，去逛逛其它的吧！</span>
                     </div>
                     <span th:each="items : ${goodsExtendList}" th:if="${goodsExtendList != null}">
-                    <!--/*@thymesVar id="goodsExtendList" type="com.szxy.pojo.GoodsExtend"*/-->
                     <div class="story">
                         <a href="javaScript:void(0)" th:onclick="'javascript:getGoodsDetail('+${items.goods.id}+')'"
                            class="head_img">

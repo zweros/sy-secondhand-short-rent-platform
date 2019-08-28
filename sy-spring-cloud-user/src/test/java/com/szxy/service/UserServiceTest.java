@@ -1,14 +1,11 @@
 package com.szxy.service;
 
-import com.netflix.discovery.converters.Auto;
-import com.szxy.mapper.UserMapper;
 import com.szxy.pojo.User;
 import com.szxy.provider.service.ProviderUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +26,7 @@ public class UserServiceTest {
 
     @Test
     public void userLoginTest(){
-        User user = this.providerUserService.userLoginService("hello", "123");
+        User user = this.providerUserService.userLoginService("18955752572", "123");
         System.out.println(user);
 
     }

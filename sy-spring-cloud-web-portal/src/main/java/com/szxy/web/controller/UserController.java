@@ -4,9 +4,13 @@ import com.szxy.pojo.GoodsExtend;
 import com.szxy.pojo.User;
 import com.szxy.service.impl.GoodsServiceImpl;
 import com.szxy.service.impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,11 +28,14 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserServiceImpl userService;
     @Autowired
     private GoodsServiceImpl goodsService;
-
+    @Value("${SESSION_MAX_INACTIVE_INTERVAL_SECONDS}")
+    private Integer SESSION_MAX_INACTIVE_INTERVAL_SECONDS;
     /**
      * 登录用户手机名检查
      * @param phone
@@ -60,12 +67,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/login",method= RequestMethod.POST)
-    public String userLogin(String phone, String password, HttpSession session,HttpServletResponse resp){
+    public String userLogin(String phone, String password,
+                            HttpSession session,HttpServletResponse resp){
         User user = this.userService.userLoginService(phone, password, resp);
         // TODO: 2019/8/25 暂时存放在 session 中
         user.setPassword(null);
         session.setAttribute("cur_user",user);
-        System.out.println("user:登录用户："+user);
+        //设置 session 有效期
+        session.setMaxInactiveInterval(SESSION_MAX_INACTIVE_INTERVAL_SECONDS);
+        logger.info("user:登录用户："+user);
         return "redirect:/goods/homeGoods.html";
     }
 
@@ -100,7 +110,7 @@ public class UserController {
     }
 
     /**
-     * 显示用户发布的物品
+     * 显示用户已发布的物品
      * @return
      */
     @RequestMapping(value="/allGoods",method= RequestMethod.GET)
@@ -108,6 +118,59 @@ public class UserController {
         List<GoodsExtend> goodsExtendList = this.goodsService.findUserPublishedAllGoods(req);
         model.addAttribute("goodsExtendList",goodsExtendList);
         return "/user/goods";
+    }
+
+    /**
+     * 显示用户主页
+     * @return
+     */
+    @RequestMapping(value="/basic",method= RequestMethod.GET)
+    public String userBasic(){
+        return "/user/basic";
+    }
+
+    /**
+     * 添加关用户注物品
+     * @return
+     */
+    @RequestMapping(value="/addFocus/{goodId}",method= RequestMethod.GET)
+    public String addUserAllFocus(@PathVariable Integer goodId,HttpServletRequest req){
+        this.goodsService.addGoodFocusService(goodId,req);
+        return "redirect:/user/allFocus";
+    }
+
+    /**
+     * 查找用户关注物品
+     * @param req
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/allFocus",method= RequestMethod.GET)
+    public String findUserAllFocus(HttpServletRequest req,Model model){
+            List<GoodsExtend> goodsExtendList = this.goodsService.findGoodFocusService(req);
+            model.addAttribute("goodsExtendList",goodsExtendList);
+            return "/user/focus";
+    }
+
+    /**
+     * 修改用户个人信息
+     */
+    @RequestMapping(value="/updateInfo",method= RequestMethod.POST)
+    public String userupdateInfo(User user,HttpServletRequest req){
+        this.userService.updateUserInfoService(user,req);
+        return  "redirect:/user/home";
+    }
+
+    /**
+     * 修改用户昵称
+     * @param username
+     * @param req
+     * @return
+     */
+    @RequestMapping(value="/changeName",method= RequestMethod.POST)
+    public String changeName(String username,HttpServletRequest req){
+        this.userService.changeNameService(username,req);
+        return  "redirect:/user/home";
     }
 
 }

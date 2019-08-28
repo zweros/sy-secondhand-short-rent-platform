@@ -40,4 +40,10 @@ public interface ProviderGoodsService {
      * @return
      */
     List<Goods> findUserPublishedAllGoodsService(Integer userId);
+
+    /**
+     * 更新物品信息
+     * @param goods
+     */
+    void updateGoodsService(Goods goods);
 }

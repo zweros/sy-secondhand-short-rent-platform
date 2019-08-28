@@ -6,6 +6,7 @@ import com.szxy.provider.service.ProviderUserService;
 import com.szxy.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProviderUserServiceImpl  implements ProviderUserService {
@@ -31,6 +32,7 @@ public class ProviderUserServiceImpl  implements ProviderUserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User userLoginService(String phone, String password) {
         User user = this.userMapper.selectByUserPhoneMapper(phone);
         if(user != null){
@@ -42,8 +44,18 @@ public class ProviderUserServiceImpl  implements ProviderUserService {
         return null;
     }
 
+
     @Override
+    @Transactional
     public int userRegisterService(String username, String phone, String password) {
         return this.userMapper.inserUserMapper(username,phone, MD5.md5(password));
     }
+
+    @Override
+    @Transactional
+    public void updateUserInfoService(User user) {
+        this.userMapper.updateUserInfoMapper(user);
+    }
+
+
 }

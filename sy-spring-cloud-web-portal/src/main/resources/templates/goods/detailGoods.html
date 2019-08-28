@@ -115,20 +115,8 @@
                     <div class="value" th:if="${seller.qq == null}">该同学没留下QQ</div>
                 </div>
                 <div>
-
                     <input type="button" value="加入关注" class="blue lighten-1 waves-effect waves-light btn" id="btn_cart"
-                           onclick="addFocus(${goodsExtend.goods.id})" th:if="${cur_user != null}"></input>
-                    <!--
-                    <c:if test="${cur_user.id==goodsExtend.goods.userId}">
-                        <input type="button" value="在线支付" data-toggle="tooltip" title="不可以购买自己的东西哦~" disabled="disabled"
-                               class="blue lighten-1 waves-effect waves-light btn" id="btn_buy"></input>
-                    </c:if>
-                    <c:if test="${cur_user.id!=goodsExtend.goods.userId}">
-                        <input type="button" value="在线支付" class="blue lighten-1 waves-effect waves-light btn"
-                               id="btn_buy"
-                               onclick="toPay(${goodsExtend.goods.id})"></input>
-                    </c:if>
-                    -->
+                           th:onclick="'javascript:addFocus('+${goods.id}+')'" th:if="${session.cur_user != null}"></input>
                 </div>
 
             </div>

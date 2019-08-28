@@ -57,7 +57,14 @@
     <select id="selUserPublishedAllGoodsMapper" parameterType="int" resultMap="goodsMap">
             select  <include refid="goodSql" />
             from goods
-            where user_id = #{userId} and status = 1
+            where user_id = #{userId} and status = 1 order by polish_time desc
+    </select>
+
+    <select id="updateGoodsMapper" parameterType="Goods" resultMap="goodsMap">
+        update goods
+            set name=#{name},price=#{price},real_price=#{realPrice},
+            catelog_id=#{catelogId},describle=#{describle}
+         where id = #{id}
     </select>
 
 </mapper>

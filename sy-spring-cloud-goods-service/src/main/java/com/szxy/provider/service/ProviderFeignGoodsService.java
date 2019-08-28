@@ -20,7 +20,7 @@ public interface ProviderFeignGoodsService {
      * @param cateid
      * @return
      */
-    @RequestMapping(value = "/catelogGoods", method = RequestMethod.GET)
+    @RequestMapping(value="/catelogGoods", method = RequestMethod.GET)
     public List<Goods> findByCatelogGoodsIdService(@RequestParam(value="cateid",required = false) Integer  cateid, @RequestParam(value="limit",required = false) Integer limit);
 
     /**
@@ -40,4 +40,6 @@ public interface ProviderFeignGoodsService {
     @RequestMapping(value="/findUserPublishedAllGoods",method = RequestMethod.GET)
     List<Goods> findUserPublishedAllGoodsService(@RequestParam("userId") Integer userId);
 
+    @RequestMapping(value="/updateGood",method = RequestMethod.POST)
+    void updateGoodsService(@RequestBody  Goods goods);
 }

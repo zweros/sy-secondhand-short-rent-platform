@@ -38,4 +38,9 @@ public class ProviderGoodsServiceImpl implements ProviderGoodsService {
     public List<Goods> findUserPublishedAllGoodsService(Integer userId) {
         return this.goodsMapper.selUserPublishedAllGoodsMapper(userId);
     }
+
+    @Override
+    public void updateGoodsService(Goods goods) {
+        this.goodsMapper.updateGoodsMapper(goods);
+    }
 }

@@ -3,17 +3,17 @@ package com.szxy.mapper;
 import com.szxy.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface UserMapper {
+
 
     /**
      * 根据用户手机号查询用户信息
      * @param phone 用户手机号
      * @return
      */
-    @Select("select * from user where phone = #{0}")
-    public User selectByUserPhoneMapper(String phone);
+    public User selectByUserPhoneMapper(@Param("phone") String phone);
 
     /**
      * 根据用户 ID 查询卖家信息
@@ -33,4 +33,11 @@ public interface UserMapper {
     int inserUserMapper(@Param("username") String username,
                         @Param("phone")String phone,
                         @Param("password")String password);
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @Update("update user set username = #{username},phone = #{phone},QQ = #{qq} where id = #{id}")
+    void updateUserInfoMapper(User user);
 }

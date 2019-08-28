@@ -42,5 +42,12 @@ public class PageController {
         return "/goods/catelogNavigation";
     }
 
+    @RequestMapping(value = "/error/noLogin", method = RequestMethod.GET)
+    public String showNoLogin() {
+        return "/error/noLogin";
+    }
+
+
+
 
 }

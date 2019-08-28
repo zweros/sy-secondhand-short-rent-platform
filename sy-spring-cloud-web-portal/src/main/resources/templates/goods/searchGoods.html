@@ -19,8 +19,8 @@
             <div class="card col" th:each="item : ${goodsExtendList}" th:if="${goodsExtendList != null}">
                 <a href="javascript:void(0)" th:onclick="'javascript:getGoodsDetail('+${item.goods.id}+')'">
                     <div class="card-image">
-                        <img th:src="@{/upload/{id}(id=${item.images[0].imgUrl})}" th:if="${item != null and ! #strings.startsWith(item.images[0].imgUrl,'http://')}"/>
-                        <img th:src="@{{imgUrl}(imgUrl=${item.images[0].imgUrl})}" th:if="${item != null and #strings.contains(item.images[0].imgUrl,'sysecondhandmarket')}"/>
+                        <img th:src="@{/upload/{id}(id=${item.images[0].imgUrl})}" th:if="${item.images[0] != null and ! #strings.startsWith(item.images[0].imgUrl,'http://')}"/>
+                        <img th:src="@{{imgUrl}(imgUrl=${item.images[0].imgUrl})}" th:if="${item.images[0] != null and #strings.contains(item.images[0].imgUrl,'sysecondhandmarket')}"/>
                     </div>
                     <div class="card-content item-price">
                         <span th:text="${item.goods.price}"></span>
