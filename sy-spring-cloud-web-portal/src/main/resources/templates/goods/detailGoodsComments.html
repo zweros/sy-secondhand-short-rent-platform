@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>物品评论</title>
+</head>
+<body>
+<div class="row detail-area">
+    <div class="clo s12">
+        <div ng-controller="commentController" class="comment stark-components z-depth-1 ng-scope">
+            <h1 class="title">评论</h1>
+            <hr class="hr1"/>
+            <hr class="hr2"/>
+            <!--/*@thymesVar id="comments" type="java.util.List"*/-->
+            <div class="comment-collection" th:each="cmt : ${comments}" th:if="comments != null">
+                <div class="comment-item ng-scope">
+                    <div class="comment-main-content">
+                        <em class="name ng-binding" th:text="${cmt.user.username}"
+                            th:if="${cmt.user != null}">:</em>
+                        <em class="ng-hide">回复</em>
+                        <em class="name ng-binding ng-hide">@:</em>
+                        <em class="ng-binding" th:text="${cmt.content}"></em>
+                    </div>
+                    <div class="comment-function">
+                        <em class="time ng-biinding" th:text="${cmt.createAt}"></em>
+                        <!--  <a class="reply-or-delete">删除</a>
+                         <a class="reply-or-delete">回复</a> -->
+                    </div>
+                </div>
+            </div>
+            <form id="addCommentForm" class="form-horizontal">
+                <div class="comment-add row">
+                    <div class="input-field col s12">
+                        <i class="iconfont prefix"></i>
+                        <input id="goodsId" name="goods_id" th:value="${goodsId}" type="hidden"/>
+                        <input id="commentbox" type="text" name="content"
+                               class="validate ng-pristine ng-untouched ng-valid ng-empty"/>
+                        <label for="commentbox">这里写下评论</label>
+                        <button type="button" class="waves-effect wave-light btn comment-submit"
+                                onclick="addComments()" th:if="${session.cur_user != null}">确认
+                        </button>
+                        <!--
+                        <c:if test="${!empty cur_user} && ${cur_user.id!=goodsExtend.comments.userId}">
+                            <button type="submit" class="waves-effect wave-light btn comment-submit">确认</button>
+                        </c:if>
+                        <c:if test="${!empty cur_user} && ${cur_user.id==goodsExtend.comments.userId}">
+                            <button data-toggle="tooltip" title="您已经评论过了哦！" disabled="disabled"
+                                    class="waves-effect wave-light btn comment-submit">确认
+                            </button>
+                        </c:if>
+                        -->
+                        <button href="javacript:void(0);" data-toggle="tooltip" title="您需要先登录哦！"
+                                disabled="disabled" th:if="${session.cur_user == null}"
+                                class="waves-effect wave-light btn comment-submit">确认
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    /* 评论 */
+    function addComments() {
+        $.ajax({
+            url: '/goods/addComments',
+            type: 'POST',
+            data: $('#addCommentForm').serialize(),// 序列化表单值
+            dataType: 'json',
+            success:function(json){
+                if(eval(json.msg)){
+                   alert("您已评论成功~");
+                }
+                /* 清空原来评论的内容，然后重新加载 */
+                $("#detailGoods-comment").empty();
+                /*延迟加载评论模块*/
+                setTimeout(function() { loadComments([[${goodsId}]]); }, 500);
+            },
+            error:function(){
+                alert('请求超时或系统出错!');
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szxy.mapper.GoodsCommentsMapper">
+
+    <sql id="cmtSql">
+            c.id,c.content,c.create_at,c.user_id comment_user_id,
+            g.id goods_id,g.user_id,g.catelog_id,g.name,g.price,
+            g.real_price,g.start_time,g.polish_time,g.end_time,
+            g.describle,g.status
+    </sql>
+
+    <resultMap id="cmtMap" type="Comments">
+        <id column="id" property="id"/>
+        <result column="create_at" property="createAt"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="content" property="content"/>
+        <!--  评论者的用户 ID -->
+        <association property="user" column="userId" javaType="User">
+            <id column="comment_user_id" property="id"/>
+        </association>
+        <association column="goods_id" property="goods" javaType="Goods">
+            <id column="goods_id" property="id" />
+            <result column="catelog_id" property="catelogId" />
+            <!--  物品所有者的用户 ID -->
+            <result column="user_id" property="userId" />
+            <result column="name" property="name" />
+            <result column="price" property="price" />
+            <result column="real_price" property="realPrice" />
+            <result column="start_time" property="startTime" />
+            <result column="polish_time" property="polishTime" />
+            <result column="end_time" property="endTime" />
+            <result column="describle" property="describle" />
+            <result column="status" property="status" />
+        </association>
+    </resultMap>
+
+    <!--  查询评论信息  -->
+    <select id="selCommentsByGoodsId" parameterType="int" resultMap="cmtMap">
+            select
+                <include refid="cmtSql" />
+            from  comments c
+            right join goods  g
+            on  c.goods_id = g.id
+            where g.id =  #{goodId}
+    </select>
+
+    <select id="selCommentsByUserId" parameterType="int" resultMap="cmtMap">
+        select
+           <include refid="cmtSql" />
+        from  comments c
+        join goods  g
+        on  c.goods_id = g.id
+        where c.user_id = #{userId}
+    </select>
+
+    <!-- 添加评论  -->
+    <insert id="insertCommentsMapper" parameterType="Comments">
+        insert into comments
+        values(default,#{user.id},#{goodsId},#{content},#{createAt})
+    </insert>
+
+</mapper>

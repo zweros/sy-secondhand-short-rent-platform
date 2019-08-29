@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script>
+        function showLogin() {
+            if ($("#signup-show").css("display") == 'block') {
+                $("#signup-show").css("display", "none");
+            }
+            if ($("#login-show").css("display") == 'none') {
+                $("#login-show").css("display", "block");
+            } else {
+                $("#login-show").css("display", "none");
+            }
+        }
+
+        function showSignup() {
+            if ($("#login-show").css("display") == 'block') {
+                $("#login-show").css("display", "none");
+            }
+            if ($("#signup-show").css("display") == 'none') {
+                $("#signup-show").css("display", "block");
+            } else {
+                $("#signup-show").css("display", "none");
+            }
+        }
+
+        function ChangeName() {
+            if ($("#changeName").css("display") == 'none') {
+                $("#changeName").css("display", "block");
+            } else {
+                $("#changeName").css("display", "none");
+            }
+        }
+
+        $(document).ready(function () {
+            //异步验证
+            $("#phone").blur(function () {
+                var phone = $(this).val();
+                $.ajax({
+                    url: '/user/register',
+                    type: 'POST',
+                    data: {phone: phone},
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.flag) {
+                            $("#errorPhone").html("账号已被注册，请重新输入!");
+                            $("#register").attr("disabled", true);
+                        } else {
+                            $("#errorPhone").empty();
+                            $("#register").attr("disabled", false);
+                        }
+                    },
+                    error: function () {
+                        alert('请求超时或系统出错!');
+                    }
+                });
+
+            });
+            /* 核查登录密码是否正确 */
+            $("#login_password").blur(function () {
+                var phone = $("#login_phone").val();
+                var password = $(this).val();
+                $.ajax({
+                    url: '/user/password',
+                    type: 'POST',
+                    data: {phone: phone, password: password},
+                    dataType: 'json',
+                    success: function (json) {
+                        if (!eval(json.flag)) {
+                            $("#errorPassword").html("请核对账号密码，再重新输入!");
+                            $("#loginIn").attr("disabled", true);
+                        } else {
+                            $("#errorPassword").empty();
+                            $("#loginIn").attr("disabled", false);
+
+                        }
+                    },
+                    error: function (json) {
+                        alert("系统出错啦")
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+<!--
+描述：顶部
+-->
+<div ng-controller="headerController" class="header stark-components navbar-fixed ng-scope">
+    <nav class="white nav1">
+        <div class="nav-wrapper">
+            <a th:href="@{/}" class="logo">
+                <em class="em1">宿院</em>
+                <em class="em2">短租平台</em>
+                <em class="em3">SZXY.RentMarket</em>
+            </a>
+            <div class="nav-wrapper search-bar">
+                <form class="ng-pristine ng-invalid ng-invalid-required" action="/goods/search" onsubmit="return getSeareachGoods()">
+                    <div class="input-field">
+                        <input id="search" name="str" placeholder="搜点什么吧..." style="height: 40px;"
+                               class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"/>
+                        <input type="submit" class="btn" value="搜索" />
+                        <label for="search" class="active">
+                            <i ng-click="search()" class="iconfont"></i>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <ul class="right">
+                <li class="publish-btn">
+                    <button onclick="showLogin()" data-toggle="tooltip" th:if="${session.cur_user == null}"
+                            title="您需要先登录哦！" class="red lighten-1 waves-effect waves-light btn">
+                        我要发布
+                    </button>
+                </li>
+                <span th:if="${session.cur_user != null}">
+                        <li class="publish-btn">
+                            <button data-position="bottom" class="red lighten-1 waves-effect waves-light btn">
+                                <a href="/goods/publishGoods">我要发布</a>
+                            </button>
+                        </li>
+                        <li>
+                            <a href="/user/allGoods">我发布的商品</a>
+                        </li>
+                        <li>
+                          <!--  <a>${cur_user.username}</a>-->
+                        </li>
+                    <!-- <li class="notification">
+                        <i ng-click="showNotificationBox()" class="iconfont"></i>
+                    </li> -->
+                        <li class="changemore">
+                            <a class="changeMoreVertShow()">
+                                <i class="iconfont"></i>
+                            </a>
+                            <div class="more-vert">
+                                <ul class="dropdown-content">
+                                    <li><a href="/user/home">个人中心</a></li>
+                                    <li><a href="/user/allFocus">我的关注</a></li>
+                                    <li><a onclick="ChangeName()">更改用户名</a></li>
+                                    <li><a href="/user/logout">退出登录</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                </span>
+                <span th:if="${session.cur_user == null}">
+                        <li>
+                            <a onclick="showLogin()">登录</a>
+                        </li>
+                        <li>
+                            <a onclick="showSignup()">注册</a>
+                        </li>
+                    </span>
+            </ul>
+        </div>
+    </nav>
+</div>
+<!--
+    描述：登录
+-->
+<div ng-controller="loginController" class="ng-scope">
+    <div id="login-show" class="login stark-components">
+        <div class="publish-box z-depth-4">
+            <div class="row">
+                <a onclick="showLogin()">
+                    <div class="col s12 title"></div>
+                </a>
+                <form action="/user/login" method="post" role="form">
+                    <div class="input-field col s12">
+                        <input type="text" name="phone" id="login_phone" required="required" pattern="^1[0-9]{10}$"
+                               class="validate ng-pristine ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-touched"/>
+                        <label>手机&nbsp;&nbsp;<div id="login_errorPhone" style="color:red;display:inline;"></div>
+                        </label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input type="password" id="login_password" name="password" required="required"
+                               class="validate ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"/>
+                        <label>密码&nbsp;&nbsp;<div id="errorPassword" style="color:red;display:inline;"></div>
+                        </label>
+                        <!--   <a ng-click="showForget()" class="forget-btn">忘记密码？</a> -->
+                    </div>
+                    <button type="submit" id="loginIn" class="waves-effect waves-light btn login-btn red lighten-1">
+                        <i class="iconfont left"></i>
+                        <em>登录</em>
+                    </button>
+                    <div class="col s12 signup-area">
+                        <em>没有账号？赶快</em>
+                        <a onclick="showSignup()" class="signup-btn">注册</a>
+                        <em>吧！</em>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+    描述：注册
+-->
+<div ng-controller="signupController" class="ng-scope">
+    <div id="signup-show" class="signup stark-components">
+        <div class="publish-box z-depth-4">
+            <div class="row">
+                <a onclick="showSignup()">
+                    <div class="col s12 title"></div>
+                </a>
+                <form action="/user/addUser" method="POST" role="form" id="signup_form">
+                    <div class="input-field col s12">
+                        <input type="text" name="username" required="required"
+                               class="validate ng-pristine ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-touched"/>
+                        <label>昵称</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input type="text" name="phone" id="phone" required="required" pattern="^1[0-9]{10}$"
+                               class="validate ng-pristine ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-touched"/>
+                        <label>手机&nbsp;&nbsp;<div id="errorPhone" style="color:red;display:inline;"></div>
+                        </label>
+
+                    </div>
+                    <div class="input-field col s12">
+                        <input type="password" name="password" required="required"
+                               class="validate ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"/>
+                        <label>密码</label>
+                    </div>
+                    <div ng-show="checkTelIsShow" class="col s12">
+                        <button type="submit" id="register"
+                                class="waves-effect waves-light btn verify-btn red lighten-1">
+                            <i class="iconfont left"></i>
+                            <em>点击注册</em>
+                        </button>
+                    </div>
+                    <div ng-show="checkTelIsShow" class="login-area col s12">
+                        <em>已有账号？去</em>
+                        <a onclick="showLogin()">登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+    描述：更改用户名
+-->
+<div ng-controller="changeNameController" class="ng-scope">
+    <div id="changeName" class="change-name stark-components">
+        <div class="publish-box z-depth-4">
+            <div class="row">
+                <div class="col s12 title">
+                    <h1>修改用户名</h1>
+                </div>
+                <form action="/user/changeName" method="post" role="form">
+                    <div class="input-field col s12">
+                        <input type="text" name="username" required="required"
+                               class="validate ng-pristine ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-touched"/>
+                        <label>修改用户名</label>
+
+                    </div>
+                    <div ng-show="checkTelIsShow" class="col s12">
+                        <button class="waves-effect waves-light btn publish-btn red lighten-1">
+                            <i class="iconfont left"></i>
+                            <em>确认</em>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -79,5 +79,15 @@
             <version>1.0.9</version>
         </dependency>
     </dependencies>
-
+    <!--资源拷贝插件-->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/**.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
