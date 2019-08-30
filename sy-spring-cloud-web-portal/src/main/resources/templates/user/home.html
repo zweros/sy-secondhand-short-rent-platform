@@ -5,83 +5,90 @@
     <meta charset="UTF-8">
     <title>个人中心</title>
     <link rel="icon" href="/img/logo.jpg" type="image/x-icon"/>
-    <link rel="stylesheet" href="/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/emoji.css" />
-    <link rel="stylesheet" href="/css/userhome.css" />
-    <link rel="stylesheet" href="/css/user.css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/css/emoji.css"/>
+    <link rel="stylesheet" href="/css/userhome.css"/>
+    <link rel="stylesheet" href="/css/user.css"/>
     <!-- bootstrap -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap-paginator.min.js"></script>
-   <script type="text/javascript">
-   
-   function viewPersonal(id){
-	   $.ajax({
-			url:'/admin/getUser',
-			type:'GET',
-			data:{id:id},
-			dataType:'json',
-			success:function(json){
-				if(json){
-					$('#myviewform').find("input[name='phone']").val(json.phone);
-					$('#myviewform').find("input[name='username']").val(json.username);
-					$('#myviewform').find("input[name='qq']").val(json.qq);
-					$('#myviewform').find("input[name='power']").val(json.power);
-					$('#myviewform').find("input[name='createAt']").val(json.createAt);
-					$('#viewModal').modal('toggle');
-				}
-			},
-			error:function(){
-				alert('请求超时或系统出错!');
-				$('#viewModal').modal('hide');
-			}
-   });
-  }
-   
-   function sendContext(){
-	 var context= $("#mycontext").text();
-	 $.ajax({
-		 url:'/user/insertSelective',
-		 type:'POST',
-		 data:{context:context},
-		 dataType:'json',
-		 success:function(json){
-			 alert(json.msg);
-			 location.reload();
-		 },
-		error:function(){
-			 alert('请求超时或系统出错!');
-			}
-	 });
-	   
-   }
-   
-   $(function(){
-       var options={
-           bootstrapMajorVersion:1,    //版本
-           currentPage:1,    //当前页数
-           numberOfPages:5,    //最多显示Page页
-           totalPages:10,    //所有数据可以显示的页数
-           onPageClicked:function(e,originalEvent,type,page){
-               console.log("e");
-               console.log(e);
-               console.log("originalEvent");
-               console.log(originalEvent);
-               console.log("type");
-               console.log(type);
-               console.log("page");
-               console.log(page);
-           }
-       }
-       $("#page").bootstrapPaginator(options);
-   })
-   </script>
+
+    <!-- 分页 -->
+    <link href="/css/mypage.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+        function viewPersonal(id) {
+            $.ajax({
+                url: '/admin/getUser',
+                type: 'GET',
+                data: {id: id},
+                dataType: 'json',
+                success: function (json) {
+                    if (json) {
+                        $('#myviewform').find("input[name='phone']").val(json.phone);
+                        $('#myviewform').find("input[name='username']").val(json.username);
+                        $('#myviewform').find("input[name='qq']").val(json.qq);
+                        $('#myviewform').find("input[name='power']").val(json.power);
+                        $('#myviewform').find("input[name='createAt']").val(json.createAt);
+                        $('#viewModal').modal('toggle');
+                    }
+                },
+                error: function () {
+                    alert('请求超时或系统出错!');
+                    $('#viewModal').modal('hide');
+                }
+            });
+        }
+
+        function sendContext() {
+            var context = $("#mycontext").text();
+            $.ajax({
+                url: '/user/insertSelective',
+                type: 'POST',
+                data: {context: context},
+                dataType: 'json',
+                success: function (json) {
+                    alert(json.msg);
+                    location.reload();
+                },
+                error: function () {
+                    alert('请求超时或系统出错!');
+                }
+            });
+
+        }
+
+       /* $(function () {
+            var options = {
+                bootstrapMajorVersion: 1,    //版本
+                currentPage: [[${noticeGrid.current }]],    //当前页数
+                numberOfPages: 10,    //最多显示Page页
+                totalPages: [[${noticeGrid.total }]],    //所有数据可以显示的页数
+                onPageClicked: function (e, originalEvent, type, page) {
+                    console.log("e");
+                    console.log(e);
+                    console.log("originalEvent");
+                    console.log(originalEvent);
+                    console.log("type");
+                    console.log(type);
+                    console.log("page");
+                    console.log(page);
+                }
+            }
+            $("#page").bootstrapPaginator(options);
+        })*/
+    </script>
 
 </head>
 <body>
 <div class="pre-2" id="big_img">
-    <img src="http://findfun.oss-cn-shanghai.aliyuncs.com/images/head_loading.gif" class="jcrop-preview jcrop_preview_s">
+    <img src="http://findfun.oss-cn-shanghai.aliyuncs.com/images/head_loading.gif"
+         class="jcrop-preview jcrop_preview_s">
 </div>
 <div id="cover" style="min-height: 639px;">
     <div id="user_area">
@@ -90,7 +97,7 @@
                 <h1 class="logo"></h1>
             </a>
             <a href="/goods/homeGoods">
-                 <img src="/img/home_header.png"  style="margin-left: 20px;" >
+                <img src="/img/home_header.png" style="margin-left: 20px;">
             </a>
             <a href="/user/home">
                 <div class="home"></div>
@@ -113,10 +120,11 @@
                 <span class="school">宿州学院</span>
                 <input type="hidden" value="${myPurse.recharge}" id="recharge"/>
                 <input type="hidden" value="${myPurse.withdrawals}" id="withdrawals"/>
-                <span class="btn" data-toggle="modal" data-target="#myModal" style="width: 98%;background-color: rgb(79, 190, 246); color:rgba(255, 255, 255, 1);margin-top:0.5cm;">
+                <span class="btn" data-toggle="modal" data-target="#myModal"
+                      style="width: 98%;background-color: rgb(79, 190, 246); color:rgba(255, 255, 255, 1);margin-top:0.5cm;">
                 	 我的信用积分：<span th:text="${session.cur_user.power}" th:if="${session.cur_user  != null}"></span>
                 </span>
-                
+
             </div>
             <div class="home_nav">
                 <ul>
@@ -157,23 +165,26 @@
         -->
         <div id="user_content">
             <div class="share">
-         <!--
-            <img src="/img/Advertisement.png">
-          -->
+                <!--
+                   <img src="/img/Advertisement.png">
+                 -->
                 <div class="publish">
-                	<form role="form" id="contextForm">
-                     <div class="pub_content">
-                        <div class="text_pub lead emoji-picker-container">
-                            <input type="text" name="context" data-emojiable="converted"  class="form-control" data-type="original-input" style="display: none;"/>
-                            <div class="emoji-wysiwyg-editor form-control" data-type="input" id="mycontext" contenteditable="true"></div>
-                            <i class="emoji-picker-icon emoji-picker face" data-type="picker" style="top: 153px;"></i>
-                            <div class="tag"></div>
+                    <form role="form" id="contextForm">
+                        <div class="pub_content">
+                            <div class="text_pub lead emoji-picker-container">
+                                <input type="text" name="context" data-emojiable="converted" class="form-control"
+                                       data-type="original-input" style="display: none;"/>
+                                <div class="emoji-wysiwyg-editor form-control" data-type="input" id="mycontext"
+                                     contenteditable="true"></div>
+                                <i class="emoji-picker-icon emoji-picker face" data-type="picker"
+                                   style="top: 153px;"></i>
+                                <div class="tag"></div>
+                            </div>
+                            <div class="img_pub">
+                                <ul></ul>
+                            </div>
                         </div>
-                        <div class="img_pub">
-                            <ul></ul>
-                        </div>
-                    </div>
-                 	  </form>
+                    </form>
                     <div class="button">
                         <span class="fa fa-image">
                             ::before
@@ -182,32 +193,48 @@
                         <div class="checkbox">
                             <button onclick="sendContext()">发 布</button>
                         </div>
-                    </div> 
-                    
+                    </div>
+
                 </div>
                 <!--
 
                     描述：闲置商品展示
                 -->
                 <div class="share_content">
-                 <c:if test="${notice==null}">
-                    <div class="no_share">
-                    <span>没有任何内容，去逛逛其它的吧！</span>
+                    <div class="no_share" th:if="${noticeGrid.rows == null}">
+                        <span>没有任何内容，去逛逛其它的吧！</span>
                     </div>
-                   </c:if>
-                   <c:if test="${notice!=null}">
-                    <div class="yes_share">
-                    <h1 style="text-align: center;">求购信息</h1><hr>
-                     <c:forEach items="${notice}" var="item" varStatus="status">
-                   	 <button type="button" class="btn btn-info" onclick="viewPersonal(${item.user.id})" style="background-color: #c6f5f4;border:0px;outline:none;">${item.user.username}</button>
-                     <span >说：&nbsp;&nbsp;&nbsp;&nbsp;${item.context}</span><br>
-                     <p style="text-align:right;color:#4fbef6;">发布时间：${item.createAt}</p>
-                     <hr><br>
-                     </c:forEach>
-                      <div id="page" style="center"></div>
-                    <!--  <h1> 1 2 3 4 5 下一页 上一页</h1> -->
-                    </div>
-                    </c:if>  
+                        <div class="yes_share">
+                             <h1 style="text-align: center;">求购信息</h1>
+                             <hr>
+                             <span th:each="item : ${noticeGrid.rows}" th:if="${noticeGrid.rows != null}">
+                                 <button type="button" class="btn btn-info" th:text="${item.user.username}"
+                                         th:onclick="'javascript:viewPersonal('+${item.user.id}+')'"
+                                         style="background-color: #c6f5f4;border:0px;outline:none;">
+
+                                 </button>
+                                <span ></span>
+                                 <span>说：&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${item.context}"></span></span><br>
+                                 <p style="text-align:right;color:#4fbef6;">发布时间：<span th:text="${item.createAt}"></span></p>
+                                 <hr><br>
+                             </span>
+                            <div  style="text-align: right">
+                                <div class="pagination">
+                                    <ul>
+                                        <li><a>总商品数:<span th:text="${noticeGrid.total }"></span>个</a></li>
+                                        <li><a>第<span th:text="${noticeGrid.current}"></span>页</a></li>
+                                        <li th:if="${noticeGrid.current > 1}">
+                                            <a th:href="@{/user/home?pageNum={num}(num=${noticeGrid.current-1})}">上一页</a>
+                                        </li>
+                                        <li th:if="${noticeGrid.current < (noticeGrid.total/noticeGrid.rowCount)+1 }">
+                                            <a th:href="@{/user/home?pageNum={num}(num=${noticeGrid.current+1})}">下一页</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!--  <h1> 1 2 3 4 5 下一页 上一页</h1> -->
+                        </div>
                 </div>
             </div>
         </div>
@@ -222,38 +249,38 @@
                 <h4 class="modal-title middle" id="myModalLabel">查看用户信息</h4>
             </div>
             <div class="modal-body" style="height: 220px;">
-	         <form id="myviewform">
-	          <div class="form-group">
-	            <label for="recipient-name" class="control-label col-sm-2" >名称:</label>
-	            <div class="col-sm-10">
-	            <input type="text" class="form-control" id="message-text" name="username" readonly/>
-	          </div>
-	          </div>
-	          <div class="form-group">
-	            <label for="message-text" class="control-label col-sm-2">手机号:</label>
-	            <div class="col-sm-10">
-	            <input type="text" class="form-control" id="message-text" name="phone" readonly/>
-	          </div> 
-	          </div>
-	           <div class="form-group">
-	            <label for="message-text" class="control-label col-sm-2">qq号:</label>
-	            <div class="col-sm-10">
-	            <input type="text" class="form-control" id="message-text" name="qq" readonly/>
-	          </div> 
-	          </div>
-	          <div class="form-group">
-	            <label for="message-text" class="control-label col-sm-2">信用积分:</label>
-	            <div class="col-sm-10">
-	            <input type="text" class="form-control" id="message-text" name="power" readonly/>
-	          </div>
-	           </div>
-	          <div class="form-group">
-	            <label for="message-text" class="control-label col-sm-2">开户时间:</label>
-	             <div class="col-sm-10">
-	            <input type="text" class="form-control" id="message-text" name="createAt" readonly/>
-	          </div>
-	           </div>
-	        </form>
+                <form id="myviewform">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label col-sm-2">名称:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="message-text" name="username" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label col-sm-2">手机号:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="message-text" name="phone" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label col-sm-2">qq号:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="message-text" name="qq" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label col-sm-2">信用积分:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="message-text" name="power" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label col-sm-2">开户时间:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="message-text" name="createAt" readonly/>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

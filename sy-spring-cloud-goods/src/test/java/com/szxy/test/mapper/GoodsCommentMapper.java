@@ -1,6 +1,6 @@
 package com.szxy.test.mapper;
 
-import com.szxy.GoodsApp;
+import com.szxy.GoodsApplication;
 import com.szxy.mapper.GoodsCommentsMapper;
 import com.szxy.pojo.Comments;
 import com.szxy.pojo.User;
@@ -20,7 +20,7 @@ import java.util.Date;
  * @Version:1.0
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={GoodsApp.class})
+@SpringBootTest(classes={GoodsApplication.class})
 public class GoodsCommentMapper {
 
     @Autowired

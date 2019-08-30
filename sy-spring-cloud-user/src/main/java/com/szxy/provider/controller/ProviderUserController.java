@@ -58,4 +58,9 @@ public class ProviderUserController implements ProviderFeignUserService {
     public void updateUserInfoService(@RequestBody User user) {
         this.providerUserService.updateUserInfoService(user);
     }
+
+    @Override
+    public void deleteFocusGoodsService(Integer goodId) {
+        this.providerUserFocusService.delFocusGoodsService(goodId);
+    }
 }

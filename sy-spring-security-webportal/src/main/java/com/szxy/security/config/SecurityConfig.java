@@ -12,9 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import cn.xyl.security.handler.MyAccessDeniedHandler;
-import cn.xyl.security.service.impl.UserDetailServiceImpl;
-
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
@@ -80,10 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		System.out.println("+++++++++++++++++++++++++++++++");
 	}
-	
-	
-	
-	
+
 	/**
 	 * 解决乱码问题
 	 * @return

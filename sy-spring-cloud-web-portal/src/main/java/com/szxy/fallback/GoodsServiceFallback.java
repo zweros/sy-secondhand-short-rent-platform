@@ -2,6 +2,7 @@ package com.szxy.fallback;
 
 import com.szxy.pojo.Goods;
 import com.szxy.service.GoodsService;
+import com.szxy.utils.GoodsGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,5 +63,15 @@ public class GoodsServiceFallback implements GoodsService {
     @Override
     public void updateGoodsService(Goods goods) {
 
+    }
+
+    @Override
+    public void deleteGoodsService(Integer goodId) {
+
+    }
+
+    @Override
+    public GoodsGrid findGoodsByPagination(Integer page, Integer pageSize) {
+        return null;
     }
 }

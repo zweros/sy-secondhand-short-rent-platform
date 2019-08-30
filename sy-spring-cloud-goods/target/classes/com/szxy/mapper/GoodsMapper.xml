@@ -36,17 +36,20 @@
         </if>
     </select>
 
+    <!--根据物品 ID 查询物品信息-->
     <select id="selByGoodId" parameterType="int" resultMap="goodsMap">
         select  <include refid="goodSql" />
         from goods
         where id = #{id} and status = 1
     </select>
 
+    <!--添加物品信息-->
     <insert id="insertGoodsMapper" parameterType="Goods">
         insert into goods
         values(#{id},#{catelogId},#{userId},#{name},#{price},#{realPrice},#{startTime},#{polishTime},#{endTime},#{describle},#{status})
     </insert>
 
+    <!--根据物品名称，搜索物品信息-->
     <select id="findGoodsByNameMapper" parameterType="string" resultMap="goodsMap">
         	select
              <include refid="goodSql" />
@@ -54,17 +57,26 @@
             where status = 1 and name like concat(#{name},'%')
     </select>
 
+    <!--查找用户已发布的物品信息-->
     <select id="selUserPublishedAllGoodsMapper" parameterType="int" resultMap="goodsMap">
             select  <include refid="goodSql" />
             from goods
             where user_id = #{userId} and status = 1 order by polish_time desc
     </select>
 
+    <!--更新物品信息-->
     <select id="updateGoodsMapper" parameterType="Goods" resultMap="goodsMap">
         update goods
             set name=#{name},price=#{price},real_price=#{realPrice},
             catelog_id=#{catelogId},describle=#{describle}
          where id = #{id}
+    </select>
+
+    <!--物品分页查询-->
+    <select id="selGoodsByPaginationMapper" resultMap="goodsMap">
+        select
+            <include refid="goodSql"/>
+        from goods  limit #{start},#{end}
     </select>
 
 </mapper>

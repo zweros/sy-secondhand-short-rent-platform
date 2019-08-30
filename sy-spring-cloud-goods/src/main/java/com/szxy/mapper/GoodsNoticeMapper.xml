@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szxy.mapper.GoodsNoticeMapper">
+
+    <sql id="col">
+         id,context,create_at,status,user_id
+    </sql>
+
+    <resultMap id="noticeMap" type="Notice">
+          <id column="id"  property="id" />
+          <result column="context" property="context" />
+          <result column="create_at" property="createAt" />
+          <result column="status" property="status" />
+         <association property="user" column="user_id" javaType="User">
+             <id column="id"  property="id"/>
+         </association>
+    </resultMap>
+
+    <!--查找全部用户求购信息-->
+    <select id="selAllNoticeMapper" resultMap="noticeMap">
+        select
+           <include refid="col" />
+        from notice where status = 0 order by create_at desc
+     </select>
+
+    <!--分页显示用户求购信息 -->
+    <select id="selNoticeByPagination" resultMap="noticeMap">
+        select
+           <include refid="col" />
+        from notice
+        order by create_at desc
+        limit #{startPos},#{endPos}
+     </select>
+
+    <!--添加用户求购信息-->
+    <insert id="addNoticeMapper" parameterType="Notice">
+        insert into notice values(default,#{user.id},#{context},#{createAt},#{status})
+    </insert>
+
+
+
+
+</mapper>

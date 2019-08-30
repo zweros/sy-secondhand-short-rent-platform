@@ -1,7 +1,6 @@
 package com.szxy.web.controller;
 
-import com.szxy.pojo.GoodsExtend;
-import com.szxy.pojo.User;
+import com.szxy.pojo.*;
 import com.szxy.service.impl.GoodsServiceImpl;
 import com.szxy.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
@@ -10,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,12 +67,14 @@ public class UserController {
     public String userLogin(String phone, String password,
                             HttpSession session,HttpServletResponse resp){
         User user = this.userService.userLoginService(phone, password, resp);
-        // TODO: 2019/8/25 暂时存放在 session 中
-        user.setPassword(null);
-        session.setAttribute("cur_user",user);
-        //设置 session 有效期
-        session.setMaxInactiveInterval(SESSION_MAX_INACTIVE_INTERVAL_SECONDS);
-        logger.info("user:登录用户："+user);
+        if(user != null){
+            // TODO: 2019/8/25 暂时存放在 session 中
+            user.setPassword(null);
+            session.setAttribute("cur_user",user);
+            //设置 session 有效期
+            session.setMaxInactiveInterval(SESSION_MAX_INACTIVE_INTERVAL_SECONDS);
+            logger.info("user:登录用户："+user);
+        }
         return "redirect:/goods/homeGoods.html";
     }
 
@@ -105,7 +104,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value="/home",method= RequestMethod.GET)
-    public String userHome(){
+    public String userHome(@RequestParam(defaultValue = "1",required = false) Integer pageNum,
+                           @RequestParam(defaultValue = "5",required = false) Integer pageSize,
+                           Model model){
+       //ist<Notice> noticeList = this.goodsService.findAllNoticeService();
+        NoticeGrid noticeGrid = this.goodsService.findNoticeByPaginationService(pageNum,pageSize);
+        model.addAttribute("noticeGrid",noticeGrid);
         return "/user/home";
     }
 
@@ -121,11 +125,11 @@ public class UserController {
     }
 
     /**
-     * 显示用户主页
+     * 个人设置
      * @return
      */
     @RequestMapping(value="/basic",method= RequestMethod.GET)
-    public String userBasic(){
+    public String userBasic(Model model){
         return "/user/basic";
     }
 
@@ -153,6 +157,17 @@ public class UserController {
     }
 
     /**
+     * 删除用户关注的物品
+     * @param goodId
+     * @return
+     */
+    @RequestMapping(value="/deleteFocus/{goodId}",method= RequestMethod.GET)
+    public String deleteFocus(@PathVariable Integer goodId){
+            this.userService.deleteFocusService(goodId);
+            return "redirect:/user/allFocus";
+    }
+
+    /**
      * 修改用户个人信息
      */
     @RequestMapping(value="/updateInfo",method= RequestMethod.POST)
@@ -171,6 +186,21 @@ public class UserController {
     public String changeName(String username,HttpServletRequest req){
         this.userService.changeNameService(username,req);
         return  "redirect:/user/home";
+    }
+
+    /**
+     * 添加求购信息
+     * @param context
+     * @param req
+     * @return
+     */
+    @RequestMapping(value="/insertSelective",method= RequestMethod.POST)
+    @ResponseBody
+    public Map<String,String> insertSelective(String context,HttpServletRequest req){
+        this.userService.addNoticeService(context,req);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("msg","ok");
+        return map;
     }
 
 }

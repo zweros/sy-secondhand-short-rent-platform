@@ -1,6 +1,6 @@
 package com.szxy.goods;
 
-import com.szxy.WebPortalApp;
+import com.szxy.WebPortalApplication;
 import com.szxy.pojo.Catelog;
 import com.szxy.pojo.Goods;
 import com.szxy.pojo.Image;
@@ -22,7 +22,7 @@ import java.util.Set;
  * @Version:1.0
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={WebPortalApp.class})
+@SpringBootTest(classes={WebPortalApplication.class})
 public class CatelogGoodsTest {
 
     @Autowired

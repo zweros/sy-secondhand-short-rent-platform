@@ -61,4 +61,7 @@ public interface ProviderFeignUserService {
 
     @RequestMapping(value="/updateUserInfo",method = RequestMethod.POST)
     void updateUserInfoService(@RequestBody  User user);
+
+    @RequestMapping(value="/deleteFocusGoods",method = RequestMethod.POST)
+    void deleteFocusGoodsService(@RequestParam("goodId") Integer goodId);
 }

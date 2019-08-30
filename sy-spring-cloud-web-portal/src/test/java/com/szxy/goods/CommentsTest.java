@@ -1,6 +1,6 @@
 package com.szxy.goods;
 
-import com.szxy.WebPortalApp;
+import com.szxy.WebPortalApplication;
 import com.szxy.pojo.Comments;
 import com.szxy.service.impl.GoodsServiceImpl;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import java.util.List;
  * @Version:1.0
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={WebPortalApp.class})
+@SpringBootTest(classes={WebPortalApplication.class})
 public class CommentsTest {
 
     @Autowired

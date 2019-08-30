@@ -5,6 +5,7 @@ import com.szxy.pojo.Focus;
 import com.szxy.provider.service.ProviderUserFocusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,12 @@ public class ProviderUserFocusServiceImpl implements ProviderUserFocusService {
     @Override
     public List<Focus> findGoodsFocusByUserIdService(Integer userId) {
         return this.userFocusMapper.selGoodsFocusByUserIdMapper(userId);
+    }
+
+    @Override
+    @Transactional
+    public void delFocusGoodsService(Integer goodId) {
+        this.userFocusMapper.delFocusGoodsMapper(goodId);
     }
 
 }
