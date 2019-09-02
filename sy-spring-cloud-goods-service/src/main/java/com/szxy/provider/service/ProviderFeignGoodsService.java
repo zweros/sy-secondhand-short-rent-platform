@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 物品服务 ——服务提供者接口
  */
-@RequestMapping("/goods")
+//@RequestMapping("/goods")
 public interface ProviderFeignGoodsService {
 
     /**
