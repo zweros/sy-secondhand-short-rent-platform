@@ -3,7 +3,10 @@ package com.szxy.mapper;
 import com.szxy.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 public interface UserMapper {
 
@@ -29,7 +32,7 @@ public interface UserMapper {
      * @param password  密码
      * @return
      */
-    @Insert("insert into user(phone,username,password)  values(#{username},#{phone},#{password})")
+    @Insert("insert into user(username,phone,password,create_at)  values(#{username},#{phone},#{password},sysdate())")
     int inserUserMapper(@Param("username") String username,
                         @Param("phone")String phone,
                         @Param("password")String password);
@@ -38,6 +41,17 @@ public interface UserMapper {
      * 更新用户信息
      * @param user
      */
-    @Update("update user set username = #{username},phone = #{phone},QQ = #{qq} where id = #{id}")
+    @Update("update user set username=#{username},phone=#{phone},QQ= #{qq},create_at=#{createAt},status=#{status} where id = #{id}")
     void updateUserInfoMapper(User user);
+
+    /**
+     * 分页查询用户信息
+     * @param start  起始位置
+     * @param end    结束位置
+     * @return
+     */
+    List<User> selUserByPaginationMapper(@Param("start") Integer start, @Param("end") Integer end);
+
+    @Select("select count(*) from user")
+    Integer selCount();
 }

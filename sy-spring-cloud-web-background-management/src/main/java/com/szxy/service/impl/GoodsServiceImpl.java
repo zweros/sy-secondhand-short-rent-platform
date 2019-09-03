@@ -1,6 +1,6 @@
 package com.szxy.service.impl;
 
-import com.szxy.provider.service.ProviderFeignGoodsService;
+import com.szxy.service.GoodsService;
 import com.szxy.utils.GoodsGrid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
  * @Version:1.0
  **/
 @Service
-public class GoodsServiceImpl  {
+public class GoodsServiceImpl {
 
     @Autowired
-    private ProviderFeignGoodsService providerFeignGoodsService;
+    private GoodsService goodsService;
 
     public GoodsGrid findGoodsByPaginationService(Integer page,Integer pageSize){
-        return this.providerFeignGoodsService.findGoodsByPagination(page,pageSize);
+        return this.goodsService.findGoodsByPagination(page,pageSize);
     }
 
 }

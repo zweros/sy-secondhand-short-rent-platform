@@ -41,6 +41,6 @@ public class ProviderGoodsNoticeServiceImpl implements ProviderGoodsNoticeServic
 
     @Override
     public void addNoticeService(Notice notice) {
-        this.goodsNoticeMapper.addNoticeMapper(notice);
+            this.goodsNoticeMapper.addNoticeMapper(notice);
     }
 }

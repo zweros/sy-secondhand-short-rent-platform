@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: dockerdemo
+
+server:
+  port: 9090
+
+

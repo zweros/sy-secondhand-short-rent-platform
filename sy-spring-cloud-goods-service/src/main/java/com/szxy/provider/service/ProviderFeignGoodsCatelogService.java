@@ -4,7 +4,6 @@ import com.szxy.pojo.Catelog;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import sun.misc.Request;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * @Version:1.0
  **/
 
-@RequestMapping("/goods")
+//@RequestMapping("/goods")
 public interface ProviderFeignGoodsCatelogService {
 
     @RequestMapping(value="/catelog",method= RequestMethod.GET)

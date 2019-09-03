@@ -1,6 +1,7 @@
 package com.szxy.provider.service;
 
 import com.szxy.pojo.User;
+import com.szxy.utils.UserGrid;
 
 public interface ProviderUserService {
 
@@ -13,4 +14,6 @@ public interface ProviderUserService {
     public int userRegisterService( String username, String phone, String password);
 
     void updateUserInfoService(User user);
+
+    UserGrid findUserByPaginationService(Integer pageNum, Integer pageSize);
 }

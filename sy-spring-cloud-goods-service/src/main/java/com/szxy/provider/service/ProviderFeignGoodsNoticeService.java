@@ -15,7 +15,7 @@ import java.util.List;
  * @Description:com.szxy.provider.service
  * @Version:1.0
  **/
-@RequestMapping("/goods")
+//@RequestMapping("/goods")
 public interface ProviderFeignGoodsNoticeService {
 
     /**

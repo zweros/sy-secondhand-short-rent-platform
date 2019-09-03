@@ -21,9 +21,7 @@
     <title>商品列表</title>
     <!-- 分页 -->
     <link href="/css/mypage.css" rel="stylesheet">
-
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 </head>
@@ -299,6 +297,32 @@
 <script type="text/javascript" src="/js/custom/base.js"></script>
 
 <script type="text/javascript">
+
+    $(function(){
+        //.ajaxError事件定位到document对象，文档内所有元素发生ajax请求异常，都将冒泡到document对象的ajaxError事件执行处理，
+        // ajax方法中有error，先处理error，再冒泡到此处的error
+        $(document).ajaxError(
+            //所有ajax请求异常的统一处理函数，处理
+            function(event,xhr,options,exc ){
+                if(xhr.status == 'undefined'){
+                    return;
+                }
+                switch(xhr.status){
+                    case 403:
+                        // 未授权异常
+                        alert("系统拒绝：您没有访问权限。");
+                        break;
+                    case 404:
+                        alert("您访问的资源不存在。");
+                        break;
+                    case 500:
+                        alert("服务繁忙，请稍后访问！");
+                        break;
+                }
+            }
+        );
+    });
+
     //初始化时间
     $(".form_datetime").datetimepicker({
         format: 'yyyy-mm-dd',
@@ -389,7 +413,7 @@
     }
 
     //根据值 动态选中
-    $("#myselected option[value='[[${searchgoods.form}]]']").attr("selected", "selected");
+    //$("#myselected option[value='[[${searchgoods.form}]]']").attr("selected", "selected");
 
 </script>
 

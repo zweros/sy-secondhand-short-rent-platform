@@ -52,15 +52,15 @@ public class ProviderGoodsServiceImpl implements ProviderGoodsService {
 
     @Override
     public GoodsGrid findGoodsByPaginationService(Integer page, Integer pageSize) {
-        GoodsGrid goodsGrid = new GoodsGrid();
-         goodsGrid.setCurrent(page);
-         goodsGrid.setRowCount(pageSize);
-         Integer start = (page-1)*pageSize;
-         Integer end = pageSize;
-         List<Goods> goodsList = this.goodsMapper.selGoodsByPaginationMapper(start,end);
-         goodsGrid.setRows(goodsList);
-         int total = this.goodsMapper.selGoodsAllCountMapper();
-         goodsGrid.setTotal(total);
-        return goodsGrid;
+            GoodsGrid goodsGrid = new GoodsGrid();
+             goodsGrid.setCurrent(page);
+             goodsGrid.setRowCount(pageSize);
+             Integer start = (page-1)*pageSize;
+             Integer end = pageSize;
+             List<Goods> goodsList = this.goodsMapper.selGoodsByPaginationMapper(start,end);
+             goodsGrid.setRows(goodsList);
+             int total = this.goodsMapper.selGoodsAllCountMapper();
+             goodsGrid.setTotal(total);
+            return goodsGrid;
     }
 }
