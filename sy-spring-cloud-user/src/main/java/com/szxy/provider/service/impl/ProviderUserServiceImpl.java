@@ -4,9 +4,12 @@ import com.szxy.mapper.UserMapper;
 import com.szxy.pojo.User;
 import com.szxy.provider.service.ProviderUserService;
 import com.szxy.utils.MD5;
+import com.szxy.utils.UserGrid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ProviderUserServiceImpl  implements ProviderUserService {
@@ -55,6 +58,20 @@ public class ProviderUserServiceImpl  implements ProviderUserService {
     @Transactional
     public void updateUserInfoService(User user) {
         this.userMapper.updateUserInfoMapper(user);
+    }
+
+    @Override
+    public UserGrid findUserByPaginationService(Integer pageNum, Integer pageSize) {
+        Integer start = (pageNum-1)*pageSize;
+        Integer end = pageSize;
+        List<User> userList = this.userMapper.selUserByPaginationMapper(start, end);
+        UserGrid userGrid = new UserGrid();
+        userGrid.setCurrent(pageNum);
+        userGrid.setRowCount(pageSize);
+        userGrid.setRows(userList);
+        Integer count = this.userMapper.selCount();
+        userGrid.setTotal(count);
+        return userGrid;
     }
 
 

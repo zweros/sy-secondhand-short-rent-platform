@@ -49,8 +49,15 @@ public class Notice {
 	public void setUser(User user) {
 		this.user = user;
 	}
-    
-    
 
-	
+	@Override
+	public String toString() {
+		return "Notice{" +
+				"id=" + id +
+				", createAt='" + createAt + '\'' +
+				", status=" + status +
+				", context='" + context + '\'' +
+				", user=" + user +
+				'}';
+	}
 }

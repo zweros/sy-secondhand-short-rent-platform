@@ -29,10 +29,18 @@
     </select>
 
     <!-- 根据 ID 查询卖家信息 -->
-    <select id="selSellerInfoByIdMapper"  parameterType="int" resultType="User">
+    <select id="selSellerInfoByIdMapper"  parameterType="int" resultMap="userMap">
             select
                 <include refid="colSql"/>
             from user where  id = #{id}
+    </select>
+
+    <!-- 分页查询用户信息 -->
+    <select id="selUserByPaginationMapper"  resultMap="userMap">
+            select
+                <include refid="colSql"/>
+            from user order by  id  desc
+            limit #{start},#{end}
     </select>
 
 </mapper>

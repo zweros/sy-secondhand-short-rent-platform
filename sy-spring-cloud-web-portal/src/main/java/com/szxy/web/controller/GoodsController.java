@@ -117,6 +117,7 @@ public class GoodsController {
         return "redirect:/user/allGoods"; //发布成功后跳转的页面
     }
 
+    // TODO: 2019/8/29  boostrap 上传组件
     /**
      * 上传物品图片
      * @return
@@ -148,10 +149,10 @@ public class GoodsController {
      * @param goodId
      * @return
      */
-    @RequestMapping(value="/deleteGoods/{goodId}",method = RequestMethod.DELETE)
+    @RequestMapping(value="/deleteGoods/{goodId}",method = RequestMethod.GET)
     public String deleteGoods(@PathVariable Integer goodId) {
-        // TODO: 2019/8/28  删除
-         return "/user/home";
+        this.goodsService.deleteGoodsService(goodId);
+         return "redirect:/user/allGoods";
      }
 
     /**

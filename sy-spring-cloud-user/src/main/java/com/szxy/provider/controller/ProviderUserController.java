@@ -5,6 +5,7 @@ import com.szxy.pojo.User;
 import com.szxy.provider.service.ProviderFeignUserService;
 import com.szxy.provider.service.ProviderUserFocusService;
 import com.szxy.provider.service.ProviderUserService;
+import com.szxy.utils.UserGrid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,5 +58,15 @@ public class ProviderUserController implements ProviderFeignUserService {
     @Override
     public void updateUserInfoService(@RequestBody User user) {
         this.providerUserService.updateUserInfoService(user);
+    }
+
+    @Override
+    public void deleteFocusGoodsService(Integer goodId) {
+        this.providerUserFocusService.delFocusGoodsService(goodId);
+    }
+
+    @Override
+    public UserGrid findUserByPaginationService(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
+        return this.providerUserService.findUserByPaginationService(pageNum,pageSize);
     }
 }

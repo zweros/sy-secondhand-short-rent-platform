@@ -2,6 +2,7 @@ package com.szxy.provider.service;
 
 import com.szxy.pojo.Focus;
 import com.szxy.pojo.User;
+import com.szxy.utils.UserGrid;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/user")
+//@RequestMapping("/user")
 public interface ProviderFeignUserService {
 
     /**
@@ -61,4 +62,10 @@ public interface ProviderFeignUserService {
 
     @RequestMapping(value="/updateUserInfo",method = RequestMethod.POST)
     void updateUserInfoService(@RequestBody  User user);
+
+    @RequestMapping(value="/deleteFocusGoods",method = RequestMethod.POST)
+    void deleteFocusGoodsService(@RequestParam("goodId") Integer goodId);
+
+    @RequestMapping(value="/findUserByPagination",method = RequestMethod.GET)
+    UserGrid findUserByPaginationService(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
 }

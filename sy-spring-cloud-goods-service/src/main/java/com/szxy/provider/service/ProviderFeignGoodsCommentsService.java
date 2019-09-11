@@ -12,7 +12,7 @@ import java.util.List;
  * @Description:com.szxy.provider.service
  * @Version:1.0
  **/
-@RequestMapping("/goods")
+//@RequestMapping("/goods")
 public interface ProviderFeignGoodsCommentsService {
 
     @RequestMapping(value="/getCmtByGoodsId",method= RequestMethod.GET)

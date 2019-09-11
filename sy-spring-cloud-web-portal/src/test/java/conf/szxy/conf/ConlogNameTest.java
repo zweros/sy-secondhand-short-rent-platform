@@ -1,12 +1,10 @@
 package conf.szxy.conf;
 
-import com.szxy.WebPortalApp;
-import com.szxy.pojo.User;
+import com.szxy.WebPortalApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.UnsupportedEncodingException;
@@ -18,7 +16,7 @@ import java.io.UnsupportedEncodingException;
  * @Version:1.0
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={WebPortalApp.class})
+@SpringBootTest(classes={WebPortalApplication.class})
 public class ConlogNameTest {
 
     @Value("${DEFAULT_CATELOG_NAME}")

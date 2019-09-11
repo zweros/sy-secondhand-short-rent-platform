@@ -1,6 +1,8 @@
 package com.szxy.service.impl;
 
+import com.szxy.pojo.Notice;
 import com.szxy.pojo.User;
+import com.szxy.service.GoodsNoticeService;
 import com.szxy.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +32,8 @@ public class UserServiceImpl {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private GoodsNoticeService goodsNoticeService;
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
     @Value("${REDIS_TTL_USER_TOKEN_SECONDS}")
@@ -124,6 +130,30 @@ public class UserServiceImpl {
                         u.setUsername(username);
                         //更新用户昵称信息
                         this.userService.updateUserInfoService(u);
+                    }
+                }
+            }
+        }
+    }
+
+    public void deleteFocusService(Integer goodId) {
+        this.userService.deleteFocusGoodsService(goodId);
+    }
+
+    public void addNoticeService(String context,HttpServletRequest req) {
+        Notice notice = new Notice();
+        notice.setContext(context);
+        notice.setStatus((byte)0);
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null  && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
+                    this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+                    User user = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
+                    if(user != null){
+                        notice.setUser(user);
+                        notice.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        this.goodsNoticeService.addNotice(notice);
                     }
                 }
             }

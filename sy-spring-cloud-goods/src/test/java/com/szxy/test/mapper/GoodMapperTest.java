@@ -1,10 +1,12 @@
 package  com.szxy.test.mapper;
 
-import com.szxy.GoodsApp;
+import com.szxy.GoodsApplication;
 import com.szxy.mapper.GoodsCommentsMapper;
 import com.szxy.mapper.GoodsMapper;
 import com.szxy.pojo.Comments;
 import com.szxy.pojo.Goods;
+import com.szxy.service.ProviderGoodsService;
+import com.szxy.utils.GoodsGrid;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,15 @@ import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={GoodsApp.class})
+@SpringBootTest(classes={GoodsApplication.class})
 public class GoodMapperTest {
 
     @Autowired
     private GoodsMapper goodsMapper;
     @Autowired
     private GoodsCommentsMapper goodsCommentsMapper;
+    @Autowired
+    private ProviderGoodsService providerGoodsService;
 
     @Test
     public void selByCatelogGoodsIdServiceTest(){
@@ -56,8 +60,6 @@ public class GoodMapperTest {
         System.out.println(goodsExtendList);
     }
 
-
-
     @Test
     public void addGood(){
         Goods good  = new Goods();
@@ -76,5 +78,21 @@ public class GoodMapperTest {
         this.goodsMapper.insertGoodsMapper(good);
     }
 
+
+    @Test
+    public void selGoodsPaginationTest(){
+        List<Goods> goodsList = this.goodsMapper.selGoodsByPaginationMapper(0, 4);
+        for (Goods goods : goodsList) {
+            System.out.println(goods);
+        }
+        System.out.println("==============");
+        GoodsGrid goodsGrid = this.providerGoodsService.findGoodsByPaginationService(2, 4);
+        System.out.println(goodsGrid.getTotal()+" "+goodsGrid.getCurrent());
+        List<Goods> goodsList2 = goodsGrid.getRows();
+        for (Goods goods : goodsList2) {
+            System.out.println(goods);
+        }
+
+    }
 
 }

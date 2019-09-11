@@ -58,6 +58,8 @@ public class GoodsServiceImpl {
     @Autowired
     private GoodsCommentsService goodsCommentsService;
     @Autowired
+    private GoodsNoticeService goodsNoticeService;
+    @Autowired
     private UserService userService;
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
@@ -312,6 +314,7 @@ public class GoodsServiceImpl {
      * @return
      */
     public List<GoodsExtend> searchGoodsService(String str) {
+        // TODO: 2019/8/29  Solr 搜索
         List<GoodsExtend> goodsExtendList = new ArrayList<>();
         List<Goods> goods = this.goodsService.searchGoodsService(str);
         for (Goods good : goods) {
@@ -426,5 +429,30 @@ public class GoodsServiceImpl {
 
     public void updateGoodService(Goods goods) {
         this.goodsService.updateGoodsService(goods);
+    }
+
+
+    public void deleteGoodsService(Integer goodId) {
+        //不删除该物品，仅将物品的状态设为 0,即将物品下架
+        this.goodsService.deleteGoodsService(goodId);
+    }
+
+    public List<Notice> findAllNoticeService() {
+        List<Notice> noticeList = this.goodsNoticeService.findAllNotice();
+        for (Notice notice : noticeList) {
+            User user = this.userService.findSellerInfoByIdService(notice.getUser().getId());
+            notice.setUser(user);
+        }
+        return  noticeList;
+    }
+
+    public NoticeGrid findNoticeByPaginationService(Integer pageNum, Integer pageSize) {
+        NoticeGrid noticeGrid = this.goodsNoticeService.findNoticeByPaginationService(pageNum,pageSize);
+        List<Notice> noticeList = noticeGrid.getRows();
+        for (Notice notice : noticeList) {
+            User user = this.userService.findSellerInfoByIdService(notice.getUser().getId());
+            notice.setUser(user);
+        }
+        return noticeGrid;
     }
 }

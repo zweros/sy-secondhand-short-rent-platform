@@ -1,9 +1,11 @@
 package com.szxy.mapper;
 
 import com.szxy.pojo.Focus;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,4 +23,6 @@ public interface UserFocusMapper {
     @Select("select id,goods_id goodsId,user_id userId from focus where user_id = #{userId}")
     List<Focus> selGoodsFocusByUserIdMapper(@Param("userId") Integer userId);
 
+    @Delete("delete from focus where goods_id = #{goodId}")
+    void delFocusGoodsMapper(@RequestParam("goodId") Integer goodId);
 }

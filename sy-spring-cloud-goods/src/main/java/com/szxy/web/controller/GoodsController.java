@@ -1,17 +1,13 @@
 package com.szxy.web.controller;
 
-import com.szxy.pojo.Catelog;
-import com.szxy.pojo.Comments;
-import com.szxy.pojo.Goods;
-import com.szxy.pojo.Image;
-import com.szxy.provider.service.ProviderFeignGoodsCatelogService;
-import com.szxy.provider.service.ProviderFeignGoodsCommentsService;
-import com.szxy.provider.service.ProviderFeignGoodsImageService;
-import com.szxy.provider.service.ProviderFeignGoodsService;
+import com.szxy.pojo.*;
+import com.szxy.provider.service.*;
 import com.szxy.service.ProviderGoodsCatelogService;
 import com.szxy.service.ProviderGoodsCommentsService;
+import com.szxy.service.ProviderGoodsNoticeService;
 import com.szxy.service.ProviderGoodsService;
 import com.szxy.service.impl.ProviderGoodsImageServiceImpl;
+import com.szxy.utils.GoodsGrid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +19,8 @@ import java.util.List;
 public class GoodsController implements ProviderFeignGoodsService,
                 ProviderFeignGoodsImageService ,
                 ProviderFeignGoodsCatelogService,
-                ProviderFeignGoodsCommentsService {
+                ProviderFeignGoodsCommentsService,
+                ProviderFeignGoodsNoticeService {
 
     @Autowired
     private ProviderGoodsService providerGoodsService;
@@ -33,6 +30,8 @@ public class GoodsController implements ProviderFeignGoodsService,
     private ProviderGoodsCatelogService providerGoodsCatelogService;
     @Autowired
     private ProviderGoodsCommentsService providerGoodsCommentsService;
+    @Autowired
+    private ProviderGoodsNoticeService providerGoodsNoticeService;
 
     /**
      * 根据物品类别查询商品信息
@@ -75,6 +74,17 @@ public class GoodsController implements ProviderFeignGoodsService,
     @Override
     public void updateGoodsService(@RequestBody  Goods goods) {
         this.providerGoodsService.updateGoodsService(goods);
+    }
+
+    @Override
+    public void deleteGoodsService(@RequestParam("goodId") Integer goodId) {
+        this.providerGoodsService.deleteGoodService(goodId);
+    }
+
+    @Override
+    public GoodsGrid findGoodsByPagination(@RequestParam("page")Integer page,
+                                           @RequestParam("pageSize") Integer pageSize) {
+        return this.providerGoodsService.findGoodsByPaginationService(page,pageSize);
     }
 
     /**
@@ -138,5 +148,21 @@ public class GoodsController implements ProviderFeignGoodsService,
     @Override
     public boolean addCommentsService(@RequestBody Comments comment) {
         return this.providerGoodsCommentsService.addCommentsService(comment);
+    }
+
+    @Override
+    public List<Notice> findAllNotice() {
+        return this.providerGoodsNoticeService.findAllNoticeService();
+    }
+
+    @Override
+    public NoticeGrid findNoticeByPaginationService(@RequestParam("pageNum")Integer pageNum,
+                                                    @RequestParam("pageSize") Integer pageSize) {
+        return this.providerGoodsNoticeService.findNoticeByPaginationService(pageNum,pageSize);
+    }
+
+    @Override
+    public void addNotice(@RequestBody  Notice notice) {
+        this.providerGoodsNoticeService.addNoticeService(notice);
     }
 }

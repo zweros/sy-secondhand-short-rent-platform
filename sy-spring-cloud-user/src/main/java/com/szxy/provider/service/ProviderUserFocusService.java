@@ -16,4 +16,5 @@ public interface ProviderUserFocusService {
 
     List<Focus> findGoodsFocusByUserIdService(Integer userId);
 
+    void delFocusGoodsService(Integer goodId);
 }

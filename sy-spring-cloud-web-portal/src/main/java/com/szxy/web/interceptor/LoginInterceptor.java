@@ -1,6 +1,8 @@
 package com.szxy.web.interceptor;
 
 import com.szxy.pojo.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,6 +29,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Value("${REDIS_TTL_USER_TOKEN_SECONDS}")
     private Long REDIS_TTL_USER_TOKEN_SECONDS;
 
+    private final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
+
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
 
@@ -36,13 +40,18 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(COOKIE_USER_TOKEN_NAME)) {
-                    this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
-                    User u = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
-                    if(u != null){
-                        if(httpServletRequest.getSession().getAttribute("cur_user") != null){
-                            this.redisTemplate.opsForValue().set(cookie.getValue(),u,REDIS_TTL_USER_TOKEN_SECONDS);
-                            return true; //用户已登录，放行
+                    try{
+                        this.redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+                        User u = (User) this.redisTemplate.opsForValue().get(cookie.getValue());
+                        if(u != null){
+                            if(httpServletRequest.getSession().getAttribute("cur_user") != null){
+                                this.redisTemplate.opsForValue().set(cookie.getValue(),u,REDIS_TTL_USER_TOKEN_SECONDS);
+                                return true; //用户已登录，放行
+                            }
                         }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        logger.warn("-->页面请求超时");
                     }
                 }
             }
