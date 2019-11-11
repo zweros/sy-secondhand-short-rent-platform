@@ -71,6 +71,7 @@ public static boolean uploadFile(String host, int port, String username, String 
 				try {
 					ftp.disconnect();
 				} catch (IOException ioe) {
+					ioe.printStackTrace();
 				}
 			}
 		}
@@ -127,5 +128,11 @@ public static boolean uploadFile(String host, int port, String username, String 
 			}
 		}
 		return result;
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+		InputStream input = new FileInputStream("d://1.png");
+		boolean flag = FtpUtil.uploadFile("192.168.170.129", 21, "ftpuser", "ftpuser", "/home/ftpuser", "/sysecondhandmarket", "ok.jpg", input);
+		System.out.println(flag);
 	}
 }

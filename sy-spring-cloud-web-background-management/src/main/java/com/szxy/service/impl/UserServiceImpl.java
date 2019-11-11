@@ -2,9 +2,13 @@ package com.szxy.service.impl;
 
 import com.szxy.pojo.User;
 import com.szxy.service.UserService;
+import com.szxy.utils.MD5;
 import com.szxy.utils.UserGrid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @Auther:zwer
@@ -45,6 +49,24 @@ public class UserServiceImpl  {
      * @param user
      */
     public void updateUserService(User user) {
+        if(user.getPassword() != null){
+            String pwdMD5 = MD5.md5(user.getPassword());
+            user.setPassword(pwdMD5);
+        }
+        user.setStatus((byte) 1);//表示状态正常
+        user.setCreateAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//添加创建时间
         this.userService.updateUserInfoService(user);
+    }
+
+    /**
+     * 添加用户信息
+     * @param user
+     */
+    public void addUserService(User user) {
+        this.userService.addUserService(user);
+    }
+
+    public User findUserByPhone(String phone) {
+        return this.userService.findUserByPhoneService(phone);
     }
 }

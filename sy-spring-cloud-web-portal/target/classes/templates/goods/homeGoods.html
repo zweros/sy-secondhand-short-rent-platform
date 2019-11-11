@@ -18,19 +18,19 @@
             $("#homeGoods-ng").load("/goods/catelogNavigation");
         });
 
-        //获取物品详情页面
+        // 获取物品详情页面
         function getGoodsDetail(goodsId) {
             $("#homeGoods-content").load("/goods/goodsId/" + goodsId + ".html",function (data) {
                   //alert(data);
             });
         }
 
-        //获取分类物品
+        // 获取分类物品
         function getGoodsByCid(cid) {
             $(".main-content").load("/goods/catelog/" + cid + ".html");
         }
 
-        //获取搜索物品
+        // 获取搜索物品
         function getSeareachGoods(){
             var str = $(":text").val();
             $(".main-content").load("/goods/search",{str:str});

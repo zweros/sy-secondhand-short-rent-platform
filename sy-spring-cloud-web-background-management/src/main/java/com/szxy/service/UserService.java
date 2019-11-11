@@ -5,10 +5,7 @@ import com.szxy.pojo.User;
 import com.szxy.utils.UserGrid;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,4 +53,9 @@ public interface UserService {
     @RequestMapping(value="/user/findUserByPagination",method = RequestMethod.GET)
     UserGrid findUserByPaginationService(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 
+    @RequestMapping(value="/user/addUser",method = RequestMethod.POST)
+    void addUserService(@RequestBody User user);
+
+    @RequestMapping(value="/user/findUserByphone",method = RequestMethod.POST)
+    User findUserByPhoneService(@RequestParam("phone")  String phone);
 }

@@ -24,8 +24,8 @@
                     </div>
                     <div class="comment-function">
                         <em class="time ng-biinding" th:text="${cmt.createAt}"></em>
-                        <!--  <a class="reply-or-delete">删除</a>
-                         <a class="reply-or-delete">回复</a> -->
+                          <a class="reply-or-delete">删除</a>
+                         <a class="reply-or-delete">回复</a>
                     </div>
                 </div>
             </div>
@@ -40,16 +40,6 @@
                         <button type="button" class="waves-effect wave-light btn comment-submit"
                                 onclick="addComments()" th:if="${session.cur_user != null}">确认
                         </button>
-                        <!--
-                        <c:if test="${!empty cur_user} && ${cur_user.id!=goodsExtend.comments.userId}">
-                            <button type="submit" class="waves-effect wave-light btn comment-submit">确认</button>
-                        </c:if>
-                        <c:if test="${!empty cur_user} && ${cur_user.id==goodsExtend.comments.userId}">
-                            <button data-toggle="tooltip" title="您已经评论过了哦！" disabled="disabled"
-                                    class="waves-effect wave-light btn comment-submit">确认
-                            </button>
-                        </c:if>
-                        -->
                         <button href="javacript:void(0);" data-toggle="tooltip" title="您需要先登录哦！"
                                 disabled="disabled" th:if="${session.cur_user == null}"
                                 class="waves-effect wave-light btn comment-submit">确认

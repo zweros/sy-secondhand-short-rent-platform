@@ -145,7 +145,7 @@
                                                  th:if="${goodsExtend.images[0] != null and ! #strings.startsWith(goodsExtend.images[0].imgUrl,'http://')}"/>
                                             <img th:src="@{{imgUrl}(imgUrl=${goodsExtend.images[0].imgUrl})}" style="width:450px;higth:350px;"
                                                  th:if="${goodsExtend.images[0] != null and #strings.contains(goodsExtend.images[0].imgUrl,'sysecondhandmarket')}"/>
-                                            <input type="hidden" name="imgUrl" th:value="${goodsExtend.images[0].imgUrl}">
+                                            <input type="hidden" name="imgUrl" th:value="${goodsExtend.images[0].imgUrl}"  th:if="${goodsExtend.images[0] != null}" />
                                             <input type="hidden" name="id" th:value="${goodsExtend.goods.id}">
                                             <input type="hidden" name="startTime" th:value="${goodsExtend.goods.startTime}">
                                             <input type="hidden" name="endTime" th:value="${goodsExtend.goods.endTime}">

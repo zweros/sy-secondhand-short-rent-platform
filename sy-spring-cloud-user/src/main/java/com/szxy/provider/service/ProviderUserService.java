@@ -16,4 +16,8 @@ public interface ProviderUserService {
     void updateUserInfoService(User user);
 
     UserGrid findUserByPaginationService(Integer pageNum, Integer pageSize);
+
+    void addUserService(User user);
+
+    User findUserByPhoneService(String phone);
 }

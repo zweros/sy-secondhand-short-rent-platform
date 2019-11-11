@@ -29,6 +29,11 @@
             $("#homeGoods-ng").load("/goods/catelogNavigation");
         }
 
+        //TODO : 去支付
+        function toPay(goodid){
+            window.location.href="/goods/buyId/"+goodid;
+        }
+
     </script>
 
 
@@ -117,6 +122,15 @@
                 <div>
                     <input type="button" value="加入关注" class="blue lighten-1 waves-effect waves-light btn" id="btn_cart"
                            th:onclick="'javascript:addFocus('+${goods.id}+')'" th:if="${session.cur_user != null}"></input>
+                    <span th:if="${session.cur_user != null && session.cur_user.id  != seller.id}">
+                        <input type="button" value="在线支付"
+                               class="blue lighten-1 waves-effect waves-light btn" id="btn_buy" th:onclick="'javascript:toPay('+${goods.id}+')'" />
+                    </span>
+                    <span th:if="${session.cur_user != null && session.cur_user.id  == seller.id}">
+                        <input type="button" value="在线支付" data-toggle="tooltip"  title="不可以购买自己的东西哦~"
+                                                disabled="disabled" class="blue lighten-1 waves-effect waves-light btn" id="btn_buy"/>
+                    </span>
+
                 </div>
 
             </div>

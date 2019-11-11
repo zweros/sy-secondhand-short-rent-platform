@@ -74,5 +74,15 @@ public class ProviderUserServiceImpl  implements ProviderUserService {
         return userGrid;
     }
 
+    @Override
+    public User findUserByPhoneService(String phone) {
+        return this.userMapper.selectByUserPhoneMapper(phone);
+    }
+
+    @Override
+    public void addUserService(User user) {
+        this.userMapper.addUserMapper(user);
+    }
+
 
 }

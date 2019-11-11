@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author lyq
  *
  */
-public class    User implements Serializable {
+public class User implements Serializable {
     private Integer id;
 
     private String phone;

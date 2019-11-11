@@ -6,6 +6,16 @@
     <title>403</title>
 </head>
 <body>
-    <h2>403 该页面不可访问</h2>
+    <!-- 引入头部和左边栏 -->
+    <div th:include="/admin/main_top"></div>
+    <div th:include="/admin/main_left"></div>
+
+    <!--main-container-part-->
+    <div id="content" style="margin-right: 100px;margin-top: 40px;">
+        <h2>403 该页面不可访问</h2>
+        <a href="/admin/index">返回主页</a>
+    </div>
+
+    <div th:include="/admin/main_bottom"></div>
 </body>
 </html>
