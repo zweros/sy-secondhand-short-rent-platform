@@ -55,7 +55,6 @@
                         alert('请求超时或系统出错!');
                     }
                 });
-
             });
             /* 核查登录密码是否正确 */
             $("#login_password").blur(function () {
@@ -73,7 +72,6 @@
                         } else {
                             $("#errorPassword").empty();
                             $("#loginIn").attr("disabled", false);
-
                         }
                     },
                     error: function (json) {
@@ -82,7 +80,6 @@
                 });
             });
         });
-
     </script>
 </head>
 <body>
@@ -126,11 +123,8 @@
                             <a href="/user/allGoods">我发布的商品</a>
                         </li>
                         <li>
-                          <!--  <a>${cur_user.username}</a>-->
+                           <a ><span th:text="${session.cur_user.username}"></span></a>
                         </li>
-                    <!-- <li class="notification">
-                        <i ng-click="showNotificationBox()" class="iconfont"></i>
-                    </li> -->
                         <li class="changemore">
                             <a class="changeMoreVertShow()">
                                 <i class="iconfont"></i>

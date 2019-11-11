@@ -203,4 +203,17 @@ public class UserController {
         return map;
     }
 
+    /**
+     * 显示我的钱包信息
+     *
+     * @param request
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/myPurse",method= RequestMethod.GET)
+    public String showMyPurse(HttpServletRequest request, Model model){
+        this.userService.showMyPurse(request, model);
+        return "/user/purse";  // 跳转到我的钱包页面中
+    }
+
 }

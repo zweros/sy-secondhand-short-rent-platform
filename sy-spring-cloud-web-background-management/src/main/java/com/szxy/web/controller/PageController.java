@@ -2,6 +2,7 @@ package com.szxy.web.controller;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -49,8 +50,9 @@ public class PageController {
      * @return
      */
     @RequestMapping("/admin/loginFail")
-    public String loginFail() {
-        return "/admin/loginFail";
+    public String loginFail(Model model) {
+        model.addAttribute("error","用户名或密码错误");
+        return "/admin/login";
     }
 
     /**
@@ -72,11 +74,24 @@ public class PageController {
         return "/admin/index";
     }
 
+    /**
+     * 显示 403 页面
+     * @return
+     */
     @RequestMapping("/admin/403")
     public String showException(){
         return "/admin/403";
     }
 
+    /**
+     * 显示添加用户页面
+     * @return
+     */
+    @RequestMapping("/admin/user/userAdd")
+    public String addUser(Model model){
+        model.addAttribute("formAction","/admin/user/addUser");
+        return "/admin/user/userAdd";
+    }
 
 
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>用户信息</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" th:href="@{/css/info_main.css}" />
+	<script type="text/javascript" src="/js/jquery.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="/js/script_user.js" ></script>
+</head>
+
+<body>
+
+	<!-- 引入头部和左边栏 -->
+	<div th:include="/admin/main_top"></div>
+	<div th:include="/admin/main_left"></div>
+	<!--=============================================================================================================================================================================-->
+	<!--main-container-part-->
+	<div id="content">
+		<!--breadcrumbs-->
+		<div id="content-header">
+			<div id="breadcrumb">
+				<a href="/back" title="主页" class="tip-bottom">
+					<i class="icon-home"></i>主页
+				</a> <a title="用户信息" class="tip-bottom">用户信息</a>
+			</div>
+		</div>
+		<!--End-breadcrumbs-->
+		<!-- Tabs Container-->
+		<section id="tabsContainer" class="clearfix">
+			<!--Inner-->
+			<div id="innerBg">
+				<!--About Tab-->
+				<article id="about" class="clearfix">
+					<form th:action="${formAction}" method="post">
+						<input type="hidden" th:value="${user?.id }" name="id" id="id">
+						<span id="span" style="color: red;"  th:if="${error !=null}" th:text="${error.defaultMessage }"></span><br/>
+							<span th:each="error : ${errors}" th:if="${errors != null}">
+						</span>
+						<!-- Introduction -->
+						<section  class="clearfix">
+							<h1>个人信息</h1>
+							<ul class="info">
+								<li><span>手机</span> :
+									<input type="text" th:value="${user?.phone }" name="phone"
+									id="phone"> <span id="span" style="color: red;">*</span>
+								</li>
+								<li th:if="${formAction == '/admin/back/user/update'}"><span>密码</span> :
+									<input type="text" th:value="${user?.password }" name="password"  id="phone">
+									<span id="span" style="color: red;">*</span>
+								</li>
+								<li><span>昵称</span> :
+									<input type="tel" th:value="${user?.username}" name="username">
+									<span id="span" style="color: red;">*</span>
+								</li>
+								<li>
+									<input type="submit" value="保存" id="submit" style="margin-bottom: 20px;"/>
+									
+									<input type="reset" onclick="window.history.go(-1)" value="取消">
+								</li>
+							</ul>
+						</section>
+						<section id="clearfix">
+
+						</section>
+					</form>
+				</article>
+			</div>
+			<!--End Inner-->
+		</section>
+
+
+	</div>
+	<!--==================================================================================================================-->
+	<div th:include="/admin/main_bottom"></div>
+	<!--End Page Wrapper-->
+</body>

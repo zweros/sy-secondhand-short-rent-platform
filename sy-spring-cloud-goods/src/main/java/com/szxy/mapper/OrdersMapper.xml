@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szxy.mapper.OrdersMapper">
+    <sql id="orderColmn">
+          o.user_id buyerId, o.order_num, o.order_price,o.order_state,o.order_date,
+	      o.order_information,o.goods_id,g.name goodsName,g.price goodsPrice,g.user_id sellerId
+    </sql>
+
+    <resultMap id="ordersMap" type="Orders">
+        <result column="buyerId" property="userId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="order_price" property="orderPrice"/>
+        <result column="order_state" property="orderState"/>
+        <result column="order_information" property="orderInformation"/>
+        <result column="order_date" property="orderDate"/>
+        <association column="goods_id" property="goods" javaType="Goods">
+            <id column="goods_id" property="id"/>
+            <result column="sellerId" property="userId"/>
+            <result column="goodsName" property="name"/>
+            <result column="goodsPrice" property="price"/>
+        </association>
+    </resultMap>
+
+    <!-- 插入订单记录 -->
+    <insert id="addOrders" parameterType="Orders">
+        insert into
+            orders
+        values(default, #{userId}, #{goods.id}, #{orderNum}, #{orderPrice},
+        #{orderState},#{orderInformation}, #{orderDate})
+    </insert>
+
+    <!--以卖家身份查看订单列表-->
+    <select id="findOrdersByUserIdOfBuyer" parameterType="int" resultMap="ordersMap">
+        select
+        <include refid="orderColmn"/>
+        from orders o
+        join goods g on g.id = o.goods_id
+        where o.user_id = #{buyerId}
+    </select>
+
+    <!-- 以卖家身份查看订单列表 -->
+    <select id="findOrdersByUserIdOfSeller" parameterType="int" resultMap="ordersMap">
+        select
+            <include refid="orderColmn"/>
+        from orders o
+        join goods g on g.id = o.goods_id
+        where g.user_id = #{sellerId}
+    </select>
+
+    <!-- 更新订单当前状态 -->
+    <update id="updateOrdersStateByOrdersNum" parameterType="Orders">
+        <if test="orderPrice  == null">
+            update orders set order_state = #{orderState} where order_num = #{orderNum}
+        </if>
+        <if test="orderPrice != null">
+            update orders
+                set order_state = #{orderState}, order_price = #{orderPrice}
+            where order_num = #{orderNum}
+        </if>
+    </update>
+
+</mapper>

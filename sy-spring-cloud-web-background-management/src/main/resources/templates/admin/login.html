@@ -16,6 +16,7 @@
     <h1 style="text-align:center;">宿院短租平台管理系统</h1>
     <form id="loginform" class="form-vertical" action="/admin/toLogin" method="post" role="form">
         <div class="control-group normal_text">
+            <span style="font-size:15px;color:red;"th:text="错误信息+':'+${error}" th:if="${error != null}"></span>
         </div>
         <div class="control-group">
             <div class="controls">

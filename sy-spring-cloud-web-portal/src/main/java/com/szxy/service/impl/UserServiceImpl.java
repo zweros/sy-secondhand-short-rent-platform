@@ -1,6 +1,7 @@
 package com.szxy.service.impl;
 
 import com.szxy.pojo.Notice;
+import com.szxy.pojo.Purse;
 import com.szxy.pojo.User;
 import com.szxy.service.GoodsNoticeService;
 import com.szxy.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -158,5 +160,27 @@ public class UserServiceImpl {
                 }
             }
         }
+    }
+
+    /**
+     *  显示我的钱包
+     *
+     * @param request  HttpServletRequest 对象
+     * @param model    Model 对象
+     */
+    public void showMyPurse(HttpServletRequest request, Model model) {
+        User user = this.getUserFromSession(request);
+        Purse purse = this.userService.findPurseByUserId(user.getId());
+        model.addAttribute("myPurse",purse);
+    }
+
+    /**
+     * 从 session 中获取用户信息
+     *
+     * @param request  HttpServletRequest 对象
+     * @return
+     */
+    private User getUserFromSession(HttpServletRequest request){
+        return (User)request.getSession().getAttribute("cur_user");
     }
 }

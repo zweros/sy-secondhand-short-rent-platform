@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecuriy5">
 <head></head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -15,7 +17,7 @@
             <span>用户管理</span> </a>
             <ul>
                 <li><a href="/admin/userList?pageNum=1">用户列表</a></li>
-                <!--<li><a href="/admin/user/user_add.jsp">添加用户</a></li>-->
+                <li><a href="/admin/user/userAdd">添加用户</a></li>
             </ul>
         </li>
         <li class="submenu"><a href="#"><i class="icon icon-signal"></i>

@@ -1,8 +1,10 @@
 package com.szxy.provider.controller;
 
 import com.szxy.pojo.Focus;
+import com.szxy.pojo.Purse;
 import com.szxy.pojo.User;
 import com.szxy.provider.service.ProviderFeignUserService;
+import com.szxy.provider.service.ProviderPurseService;
 import com.szxy.provider.service.ProviderUserFocusService;
 import com.szxy.provider.service.ProviderUserService;
 import com.szxy.utils.UserGrid;
@@ -20,6 +22,8 @@ public class ProviderUserController implements ProviderFeignUserService {
     private ProviderUserService providerUserService;
     @Autowired
     private ProviderUserFocusService providerUserFocusService;
+    @Autowired
+    private ProviderPurseService providerPurseService;
 
     @Override
     public int registerCheck(@RequestParam  String phone) {
@@ -69,4 +73,30 @@ public class ProviderUserController implements ProviderFeignUserService {
     public UserGrid findUserByPaginationService(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
         return this.providerUserService.findUserByPaginationService(pageNum,pageSize);
     }
+
+    @Override
+    public User findUserByPhoneService(@RequestParam("phone") String phone) {
+        return this.providerUserService.findUserByPhoneService(phone);
+    }
+
+    @Override
+    public void updatePurseByUserId(@RequestBody  Purse purse) {
+        this.providerPurseService.updatePurseByUserId(purse);
+    }
+
+    @Override
+    public Purse findPurseByUserId(Integer userid) {
+        return this.providerPurseService.findPurseByUserId(userid);
+    }
+
+    @Override
+    public void addPurse(@RequestBody  Integer userId) {
+        this.providerPurseService.addPurse(userId);
+    }
+
+    @Override
+    public void addUserService(@RequestBody User user) {
+        this.providerUserService.addUserService(user);
+    }
+
 }

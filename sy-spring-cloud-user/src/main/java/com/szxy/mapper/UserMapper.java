@@ -4,7 +4,6 @@ import com.szxy.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -41,7 +40,6 @@ public interface UserMapper {
      * 更新用户信息
      * @param user
      */
-    @Update("update user set username=#{username},phone=#{phone},QQ= #{qq},create_at=#{createAt},status=#{status} where id = #{id}")
     void updateUserInfoMapper(User user);
 
     /**
@@ -54,4 +52,7 @@ public interface UserMapper {
 
     @Select("select count(*) from user")
     Integer selCount();
+
+    @Insert("insert into user(phone,username,password) values(#{phone},#{username},#{password})")
+    void addUserMapper(User user);
 }

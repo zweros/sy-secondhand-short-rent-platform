@@ -43,4 +43,17 @@
             limit #{start},#{end}
     </select>
 
+    <!-- 更新用户信息 -->
+    <update id="updateUserInfoMapper" parameterType="User">
+        update user
+            set username=#{username},
+                phone=#{phone},
+                <if test="password != null">password=#{password},</if>
+                <if test="qq != null">QQ=#{qq},</if>
+                <if test="createAt != null">create_at=#{createAt},</if>
+                status=#{status}
+            where id = #{id}
+
+    </update>
+
 </mapper>

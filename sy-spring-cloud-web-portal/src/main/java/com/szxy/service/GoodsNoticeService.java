@@ -16,31 +16,33 @@ import java.util.List;
  * @Description:com.szxy.service
  * @Version:1.0
  **/
-
-@FeignClient(name="sy-spring-clound-zuul-gateway")
-public interface GoodsNoticeService{
+@FeignClient(name = "sy-spring-clound-zuul-gateway")
+public interface GoodsNoticeService {
 
     /**
      * 查找所有求购信息
+     *
      * @return
      */
-    @RequestMapping(value="/goods/findAllNotice",method = RequestMethod.GET)
+    @RequestMapping(value = "/goods/findAllNotice", method = RequestMethod.GET)
     public List<Notice> findAllNotice();
 
     /**
      * 添加求购信息
+     *
      * @param notice
      */
-    @RequestMapping(value="/goods/addNotice",method = RequestMethod.POST)
+    @RequestMapping(value = "/goods/addNotice", method = RequestMethod.POST)
     public void addNotice(@RequestBody Notice notice);
 
     /**
      * 显示求购信息分页查询
+     *
      * @param pageNum
      * @param pageSize
      * @return
      */
-    @RequestMapping(value="/goods/findNoticeByPagination",method = RequestMethod.POST)
-    NoticeGrid findNoticeByPaginationService(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize") Integer pageSize);
+    @RequestMapping(value = "/goods/findNoticeByPagination", method = RequestMethod.POST)
+    NoticeGrid findNoticeByPaginationService(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 
 }

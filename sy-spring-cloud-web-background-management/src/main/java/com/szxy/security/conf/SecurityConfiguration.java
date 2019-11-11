@@ -66,8 +66,10 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/toLogin").permitAll()				//登录的请求不需要认证。
                 .antMatchers("/admin/loginFail").permitAll()            //登录失败请求不需要认证
                 .antMatchers("/admin/updateUser").hasRole("superAdmin") //只有超级管理员才可以修改
+                .antMatchers("/admin/user/userAdd").hasRole("superAdmin")
+                .antMatchers("/admin/user/addUser").hasRole("superAdmin")
+                .antMatchers("/admin/back/user/update").hasRole("superAdmin")
                 .anyRequest().authenticated();							//所有请求都需要认证
-
         //异常处理
         http.
                 exceptionHandling().

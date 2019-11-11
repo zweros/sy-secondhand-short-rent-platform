@@ -60,14 +60,15 @@
                 </div>
                 <span class="name" th:text="${session.cur_user.username}" th:if="${session.cur_user  != null}"></span><hr>
                 <span class="school">宿州学院</span>
-                <!-- <a class="btn" style="width: 98%;background-color: rgb(79, 190, 246);color:rgba(255, 255, 255, 1);" href="/user/myPurse">
-                     我的钱包：￥${myPurse.balance}
-                 </a>-->
+                <a class="btn" style="width: 98%;background-color: rgb(79, 190, 246);color:rgba(255, 255, 255, 1);" href="/user/myPurse">
+                     我的钱包：￥ <span th:text="${myPurse.balance}" th:if="${myPurse != null}"></span>
+                 </a>
                 <input type="hidden" value="${myPurse.recharge}" id="recharge"/>
                 <input type="hidden" value="${myPurse.withdrawals}" id="withdrawals"/>
-               <span class="btn" data-toggle="modal" data-target="#myModal" style="width: 98%;background-color: rgb(79, 190, 246); color:rgba(255, 255, 255, 1);margin-top:0.5cm;" >
-                   我的信用积分：<span th:text="${session.cur_user.power}"></span>
-               </span>
+                <span class="btn" data-toggle="modal" data-target="#myModal" style="width: 98%;background-color: rgb(79, 190, 246); color:rgba(255, 255, 255, 1);margin-top:0.5cm;" >
+                   我的信用积分：<span th:text="${session.cur_user.power}" th:if="${session.cur_user != null}"></span>
+                </span>
+                <hr />
                 
             </div>
             <div class="home_nav">
