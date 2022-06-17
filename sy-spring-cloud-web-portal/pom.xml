@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.56</version>
+            <version>1.2.83</version>
         </dependency>
         <!-- Spring Cloud Bus 消息总线 -->
         <dependency>
